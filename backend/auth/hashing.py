@@ -1,10 +1,10 @@
 #hashing.py
 
 class Hasher():
+    '''
+    Wrapper for static method that hashes passwords
+
+    '''
     @staticmethod
     def hash_passw(password: str):
         return 'fakehashed'+password
-
-    @staticmethod
-    def check_passw(stored_password: str, hashed_password: str):
-        return stored_password == hashed_password
