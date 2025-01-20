@@ -1,7 +1,7 @@
 #auth.py
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
-from fastapi import Depends, HTTPException, APIRouter, status
+from fastapi import Depends, HTTPException, APIRouter, status, Response
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from auth.hashing import *
 from schemas.user_schema import *
@@ -32,7 +32,6 @@ def create_token(data: dict, expiration: timedelta|None = None)-> str:
         str: Encoded token
     '''
 
-
     to_encode = data.copy()
 
     if expiration:
@@ -56,17 +55,15 @@ def check_token(token: Annotated[str, Depends(oauth2_scheme)])-> str:
         str: Input token    
 
     '''
+   
     try:
-        decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=settings.ALGORITHM)
-    except:
-        raise HTTPException(status_code=403, detail="Invalid token.")
+        jwt.decode(token, settings.SECRET_KEY, algorithms=settings.ALGORITHM)
 
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.JWTError:
+        raise HTTPException(status_code=403, detail="Invalid token")
 
-    exp_time = datetime.fromtimestamp(decoded_token['exp'], timezone.utc)
-
-    if exp_time<datetime.now(timezone.utc):
-        raise HTTPException(status_code=403, detail="Invalid token.")
-    
     return token
     
 
@@ -112,4 +109,6 @@ async def token_request(form_data: Annotated[OAuth2PasswordRequestForm, Depends(
         data={"user": user.username}, expiration=access_token_expires
     )
     token = Token(access_token=access_token, token_type="bearer")
+
+    
     return token

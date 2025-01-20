@@ -53,7 +53,7 @@ The API is modular. Basic configuration is in the core folder (settings and a fi
 
 ## Authenticating
 
-Users must authenticate in order to get a token that allows them to perform calls to the endpoints. This is achieved through a Ouath2 scheme in `/token`. Afterwards, every call must provide the bearer token.
+Users must authenticate in order to get a token that allows them to perform calls to the endpoints. This is achieved through a Ouath2 scheme in `/token`. Afterwards, every call must provide the bearer token in the authorization header.
 
 Endpoints must check authenticity of the token through a dependence. See example:
 

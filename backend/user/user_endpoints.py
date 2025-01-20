@@ -48,7 +48,7 @@ async def create_user(user: UserRegistration):
 
 
 @router.delete("/delete_user")
-async def delete_user(user: str):
+async def delete_user(user: str, token: Annotated[str, Depends(check_token)]):
     '''
     Deletes a user from the database.
 
