@@ -4,6 +4,9 @@ from core.config import settings
 import json
 
 def save_users_db():
+    '''
+    Saves the user database to disk.
+    '''
     TEMP_DB = settings.USERS_DB.copy()
     for key in TEMP_DB.keys():
         TEMP_DB[key]['hashed_password'] = TEMP_DB[key]['hashed_password'].decode()

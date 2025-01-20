@@ -7,6 +7,8 @@ from schemas.token_schema import Token
 router = APIRouter()
 
 
+# Generic example of a GET endpoint
+
 @router.get("/")
 def hello_api(token: Annotated[Token, Depends(check_token_expiration)]):
     ''''

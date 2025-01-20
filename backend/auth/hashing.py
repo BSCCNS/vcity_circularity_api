@@ -5,9 +5,11 @@ from core.config import settings
 import bcrypt
 
 
+#Class containing methods to hash passwords
+
 class Hasher():
     '''
-    Wrapper for static method that hashes passwords
+    Wrapper class for static method that hashes passwords
 
     '''
     @staticmethod

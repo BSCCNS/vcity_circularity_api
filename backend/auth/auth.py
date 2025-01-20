@@ -16,7 +16,11 @@ router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-def create_token(data: dict, expiration: timedelta|None = None):
+#################################
+# Functions for token management
+#################################
+
+def create_token(data: dict, expiration: timedelta|None = None)-> str:
     '''
     Creates a token given a dictionary of data.
 
@@ -41,8 +45,17 @@ def create_token(data: dict, expiration: timedelta|None = None):
     return encoded_token
 
 
-def check_token_expiration(token: Annotated[str, Depends(oauth2_scheme)]):
+def check_token_expiration(token: Annotated[str, Depends(oauth2_scheme)])-> str:
+    '''
+    Confirms whether the token is valid or has expired.
 
+    Parameters:
+        token (str): Encoded JWT token
+    
+    Returns:
+        str: Input token    
+
+    '''
     try:
         decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=settings.ALGORITHM)
     except:
@@ -61,6 +74,17 @@ def check_token_expiration(token: Annotated[str, Depends(oauth2_scheme)]):
 
 @router.post("/token")
 async def token_request(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> Token:
+
+    '''
+    Function wrapping the login and authorization process. 
+
+    Parameters:
+        form_data (OAuth2PasswordRequestForm): Username and password obtained through a request form in Ouath2.
+
+    Returns:
+        Token: Object made with the token schema, containing the encoded token and its type.
+
+    '''
     
     # We query the username in the DB
     user_dict = settings.USERS_DB.get(form_data.username) 

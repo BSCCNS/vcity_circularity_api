@@ -11,9 +11,22 @@ from data.db_methods import *
 
 router = APIRouter()
 
+# Endpoints for user management
+
+
 
 @router.post("/create_user")
 async def create_user(user: UserRegistration):
+    '''
+    Creates a new user in the database.
+
+    Parameters:
+        user (UserRegistration): Input should be given as a JSON to the post method.
+
+    Returns:
+        JSONResponse: Returns a positive response when the user is created. Raises an exception otherwise.
+
+    '''
     user_exist = settings.USERS_DB.get(user.username)
 
     if user_exist:
@@ -36,6 +49,17 @@ async def create_user(user: UserRegistration):
 
 @router.delete("/delete_user")
 async def delete_user(user: str):
+    '''
+    Deletes a user from the database.
+
+    Parameters:
+        user (str): Username of the user to delete.
+
+    Returns:
+        JSONResponse: Returns a positive response when the user is deleted. Raises an exception otherwise.
+    
+    '''
+    
     user_exist = settings.USERS_DB.get(user)
 
     if not user_exist:

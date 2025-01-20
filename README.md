@@ -22,14 +22,19 @@
 │   │   ├── endpoints.py 
 │   │   ├── routers.py    
 │   ├── data/
+│   │   ├── db_methods.py
 │   │   ├── fake_db.py
+│   │   ├── users_db_fake.json
 │   ├── schemas/
 │   │   ├── token_schema.py
 │   │   ├── user_schema.py
+│   ├── user/
+│   │   ├── user_endpoints.py
 ├── main.py
 ├── requirements.txt
 ├── README.md
 ```
+
 The API is modular. Basic configuration is in the core folder (settings and a file collecting all the router points). Different functionalities are implemented in their corresponding folder. Each one through a router object. The `main.py`file calls the application and connects the routers.
 
 
@@ -42,3 +47,5 @@ The API is modular. Basic configuration is in the core folder (settings and a fi
 `data`: Contains external data for the API. In this barebones version, it only contains a fake database file implemented through a dictionary.
 
 `schemas`: Contains pydantic schemas for the different variables used.
+
+`user`: Contains methods related to user creation and deletion.
