@@ -69,6 +69,10 @@ def check_token(token: Annotated[str, Depends(oauth2_scheme)])-> str:
     
     return token
     
+
+#################################
+# Endpoints
+#################################
     
 #POST request for authentification and handling the token (in JWT format))
 

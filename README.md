@@ -42,7 +42,7 @@ The API is modular. Basic configuration is in the core folder (settings and a fi
 
 `auth`: Contains functions for user authentication using an Ouath2 scheme. It implements password hashing and identification throug a JWT token.
 
-`core`: Contains core functions for the API. In particular, it routes together all routers in the different code pieces. It also provides a configuration file with the API settings.
+`core`: Contains core functions for the API. In particular, it routes together all routers in the different code pieces. It also provides a configuration file with the API settings, and an example of a get endpoint.
 
 `data`: Contains external data for the API. In this barebones version, it only contains a fake database file implemented through a dictionary.
 
