@@ -1,18 +1,21 @@
 #fake_db.py
 
-users_db = {
-    "he-man": {
-        "username": "he-man",
-        "full_name": "Prince Adam",
-        "email": "heman@eternia.com",
-        "hashed_password": bytes(b'$2b$12$pNbWwdbmEFjZCEGKxGgbFeO2Vf2qSJ8yVERd.mPeMc.RmHrIl19py'),
-    },
-    "skeletor": {
-        "username": "skeletor",
-        "full_name": "Skeletor",
-        "email": "skeletor@grayskull.com",
-        "hashed_password": bytes(b'$2b$12$pNbWwdbmEFjZCEGKxGgbFeO2Vf2qSJ8yVERd.mPeMc.RmHrIl19py'),
-    },
-}
+import json
+
+class Database():
+    def __init__(self, db_route: str):
+        self.db_route = db_route    
+        self.db = self.load_db()
+
+        for key in self.db.keys():
+            self.db[key]['hashed_password'] = self.db[key]['hashed_password'].encode()
+        
+    def load_db(self):
+        with open(self.db_route, 'r') as file:
+            data = file.read()
+            return json.loads(data)
 
 
+db_ob = Database('data/users_db_fake.json')
+
+users_db = db_ob.db

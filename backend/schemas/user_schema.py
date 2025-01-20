@@ -9,4 +9,7 @@ class User(BaseModel):
     full_name: str | None = None
 
 class UserInDB(User):
-    hashed_password: bytes
+    hashed_password: bytes|None = None
+
+class UserRegistration(User):
+    password: str 
