@@ -1,3 +1,4 @@
 __pycache__
 .venv
 TODO.txt
+db_generation.ipynb

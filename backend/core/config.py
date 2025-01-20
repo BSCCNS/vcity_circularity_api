@@ -13,6 +13,6 @@ class Settings:
     #Setting for token encoding (the secret key is Hex 32)
     SECRET_KEY = '536813181b97e9b63698643c2c8b4edc44b78ca41071a1c92bc9ebdbc09c32de'
     ALGORITHM = 'HS256'
-    ACCESS_TOKEN_EXPIRE_MINUTES = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES = 15
 
 settings = Settings()

@@ -21,9 +21,11 @@ def create_token(data: dict, expiration: timedelta|None = None):
     Creates a token given a dictionary of data.
 
     Parameters:
-        
+        data (dict): Dictionary to encode
+        expiration (timedelta|None, optional): Default value is None. Time allowed for the token to exist. If None, it defaults to 15 minutes.
+    
     Returns:
-
+        str: Encoded token
     '''
 
 
@@ -39,8 +41,22 @@ def create_token(data: dict, expiration: timedelta|None = None):
     return encoded_token
 
 
+def check_token_expiration(token: Annotated[str, Depends(oauth2_scheme)]):
+
+    try:
+        decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=settings.ALGORITHM)
+    except:
+        raise HTTPException(status_code=403, detail="Invalid token.")
 
 
+    exp_time = datetime.fromtimestamp(decoded_token['exp'], timezone.utc)
+
+    if exp_time<datetime.now(timezone.utc):
+        raise HTTPException(status_code=403, detail="Invalid token.")
+    
+    return token
+    
+    
 #POST request for authentification and handling the token (in JWT format))
 
 @router.post("/token")
