@@ -49,7 +49,7 @@ The API is modular. Basic configuration is in the core folder (settings and a fi
 
 `schemas`: Contains pydantic schemas for the different variables used.
 
-`user`: Contains methods related to user creation and deletion.
+`user`: Contains methods related to user creation and deletion, as well as user related endpoints.
 
 
 ## Authenticating
