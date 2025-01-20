@@ -60,9 +60,9 @@ Endpoints must check authenticity of the token through a dependence. See example
 ```python
 from typing import Annotated
 from fastapi import Depends
-from auth.auth import check_token_expiration
+from auth.auth import check_token
 
 @router.get("/")
-def get_endpoint(token: Annotated[str, Depends(check_token_expiration)]):
+def get_endpoint(token: Annotated[str, Depends(check_token)]):
     ...
 ```

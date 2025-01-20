@@ -45,7 +45,7 @@ def create_token(data: dict, expiration: timedelta|None = None)-> str:
     return encoded_token
 
 
-def check_token_expiration(token: Annotated[str, Depends(oauth2_scheme)])-> str:
+def check_token(token: Annotated[str, Depends(oauth2_scheme)])-> str:
     '''
     Confirms whether the token is valid or has expired.
 
