@@ -1,8 +1,7 @@
 #endpoints.py
 from typing import Annotated
 from fastapi import Depends, APIRouter
-from auth.auth import oauth2_scheme, check_token_expiration
-from schemas.token_schema import Token
+from auth.auth import check_token_expiration
 
 router = APIRouter()
 
@@ -10,9 +9,10 @@ router = APIRouter()
 # Generic example of a GET endpoint
 
 @router.get("/")
-def hello_api(token: Annotated[Token, Depends(check_token_expiration)]):
+def hello_api(token: Annotated[str, Depends(check_token_expiration)]):
+
     ''''
-    GET call to /. Returns a hello message. It needs a Beared head.
+    GET call to /. Returns a hello message. User must be authenticated.
 
     '''
     return {"msg":"By the Power of Grayskull! I have the power!"}
