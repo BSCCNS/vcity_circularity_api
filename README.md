@@ -67,7 +67,7 @@ Different functionalities are implemented in their corresponding folder. Each on
 
 Users must authenticate in order to get a token that allows them to perform calls to the endpoints. This is achieved through a Ouath2 scheme in `/token`. Afterwards, every call must provide the bearer token in the authorization header.
 
-The fake database provides two users: `he-man` with superuser acces, and `skeletor` being a normal user. Both have the password `password`.
+The fake database provides two users: `heman` with superuser acces, and `manatarms` being a normal user. Both have the password `password`.
 
 Endpoints must check authenticity of the token through a dependence. See example:
 
