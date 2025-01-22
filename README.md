@@ -36,12 +36,14 @@
 ├── README.md
 ```
 
-The API is modular. Basic configuration is in the core folder (settings and a file collecting all the router points). Different functionalities are implemented in their corresponding folder. Each one through a router object. The `main.py`file calls the application and connects the routers.
+The API is modular. Basic configuration is in the core folder (settings and a file collecting all the router points). It also contains an example of endpoint in `endpoints.py`. 
+
+Different functionalities are implemented in their corresponding folder. Each one through a router object. The `main.py` file calls the application and connects the routers.
 
 
 ## Folder description
 
-`auth`: Contains functions for user authentication using an Ouath2 scheme. It implements password hashing and identification throug a JWT token.
+`auth`: Contains functions for user authentication using an Ouath2 scheme. It implements password hashing and identification throug a JWT token. It also allows for defining scopes.
 
 `core`: Contains core functions for the API. In particular, it routes together all routers in the different code pieces. It also provides a configuration file with the API settings, and an example of a get endpoint.
 
@@ -66,4 +68,22 @@ from auth.auth import check_token
 @router.get("/")
 def get_endpoint(token: Annotated[str, Depends(check_token)]):
     ...
+```
+
+If scopes are present (for example, a `'superuser'` scope by default, one must use instead)
+
+```python
+from typing import Annotated
+from fastapi import Depends
+from auth.auth import check_token
+
+@router.get("/")
+def get_endpoint(token: Annotated[str, Security(check_token, scopes = ['superuser'])]):
+    ...
+```
+
+Scopes can also be added to the full router instead than to any individual endpoint, by
+
+```python
+APIRouter(dependencies=[Security(check_token, scopes=["superuser"])])
 ```

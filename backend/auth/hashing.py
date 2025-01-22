@@ -4,7 +4,6 @@
 from core.config import settings
 import bcrypt
 
-
 #Class containing methods to hash passwords
 
 class Hasher():
