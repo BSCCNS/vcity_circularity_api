@@ -8,7 +8,7 @@ class Settings:
     PROJECT_NAME: str = 'Skeletor: a barebones API using FastAPI'
     DESCRIPTION: str = 'This is a basic API with standard funcionalities that will serve as a starting point to build a full API for a project.'
     CONTACT: dict[str] = {'name': 'M. Herrero', 'e-mail': 'mherrero@bsc.es'}
-    PROJECT_VERSION: str = '0.0.3'
+    PROJECT_VERSION: str = '0.1'
     USERS_DB = users_db
 
     #Scopes for user authorization
