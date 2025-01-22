@@ -1,35 +1,37 @@
-#hashing.py
+# hashing.py
 
 
 from core.config import settings
 import bcrypt
 
-#Class containing methods to hash passwords
+# Class containing methods to hash passwords
 
-class Hasher():
-    '''
+
+class Hasher:
+    """
     Wrapper class for static method that hashes passwords
 
-    '''
+    """
+
     @staticmethod
     def hash_passw(password):
-        '''
+        """
         Hashes the password using the Bcrypt algorithm
-        
+
         Parameters:
             password (str): Plain password in string format
 
         Returns:
             str: Password hashed
-        '''
-        pwd_bytes = password.encode('utf-8')
+        """
+        pwd_bytes = password.encode("utf-8")
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(password=pwd_bytes, salt=salt)
         return hashed_password
-    
+
     @staticmethod
     def verify_password(plain_password, hashed_password):
-        '''
+        """
         Verifies the validity of a given password against a hashed one.
 
         Parameters:
@@ -38,10 +40,11 @@ class Hasher():
 
         Returns:
             boolean: True if hashed(plain_password) = = hashed_password. False otherwise.
-        
 
 
-        '''
-        password_byte_enc = plain_password.encode('utf-8')
-        return bcrypt.checkpw(password = password_byte_enc , hashed_password = hashed_password)
 
+        """
+        password_byte_enc = plain_password.encode("utf-8")
+        return bcrypt.checkpw(
+            password=password_byte_enc, hashed_password=hashed_password
+        )
