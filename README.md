@@ -74,7 +74,7 @@ If scopes are present (for example, a `'superuser'` scope by default, one must u
 
 ```python
 from typing import Annotated
-from fastapi import Depends
+from fastapi import Security
 from auth.auth import check_token
 
 @router.get("/")
@@ -87,3 +87,5 @@ Scopes can also be added to the full router instead than to any individual endpo
 ```python
 APIRouter(dependencies=[Security(check_token, scopes=["superuser"])])
 ```
+
+Superusers must have the flag `is_superuser = True` in the database. Functions restricted to superusers are achieved by replacing the the dependence by `check_superuser` and adding the scope for extra security (e.g. superusers need to be logged as superusers.)
