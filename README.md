@@ -29,7 +29,7 @@
 │   │   ├── token_schema.py
 │   │   ├── user_schema.py
 │   ├── user/
-│   │   ├── user_endpoints.py
+│   │   ├── superuser_endpoints.py
 │   │   ├── user_methods.py
 ├── main.py
 ├── requirements.txt
