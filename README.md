@@ -81,7 +81,7 @@ def get_endpoint(token: Annotated[str, Depends(check_token)]):
     ...
 ```
 
-If scopes are present (for example, a `'superuser'` scope by default, one must use instead)
+If scopes are present (for example, a `'superuser'` scope by default), one must use instead
 
 ```python
 from typing import Annotated
