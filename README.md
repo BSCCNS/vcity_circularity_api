@@ -12,11 +12,10 @@
 
 ### Local execution
 1. Clone the repository.
-2. Create a virtual environment with `python -m venv venv`.
-3. Enter into the backend folder `cd backend`
-4. Install the requirements with `pip install -r requirements.txt`.
-5. Run the server with uvicorn `uvicorn main:app`. Add the flag `--reload` for automatic reloading when testing.
-6. The API runs by default in `localhost:8000`.
+2. If not installed install uv `pipx install uv`
+3. Run scripts with `uv run my_script.py`. it creates an venv from pyproject.toml and runs the script. 
+4. Run the server with uvicorn `uvicorn main:app`. Add the flag `--reload` for automatic reloading when testing.
+5. The API runs by default in `localhost:8000`.
 
 
 ## Overview
