@@ -1,9 +1,9 @@
 # main.py
 
 from fastapi import FastAPI
-from core.config import settings
-from core.routers import api_router
-
+from cicloapi.core.config import settings
+from cicloapi.core.routers import api_router
+import uvicorn
 
 # Mounts the API and include all routers onto it
 
@@ -14,3 +14,6 @@ app = FastAPI(
     contact=settings.CONTACT,
 )
 app.include_router(api_router)
+
+def main():
+    uvicorn.run(app, host="0.0.0.0", port=8000)

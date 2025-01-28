@@ -68,7 +68,7 @@ Users must authenticate in order to get a token that allows them to perform call
 
 The fake database provides two users: `heman` with superuser acces, and `manatarms` being a normal user. Both have the password `password`.
 
-Endpoints must check authenticity of the token through a dependence. See example:
+Endpoints must check authenticity of the token through a dependence (check_token returns the decoded token). See example:
 
 ```python
 from typing import Annotated
@@ -76,7 +76,7 @@ from fastapi import Depends
 from auth.auth import check_token
 
 @router.get("/")
-def get_endpoint(token: Annotated[str, Depends(check_token)]):
+def get_endpoint(token: Annotated[dict, Depends(check_token)]):
     ...
 ```
 
@@ -88,7 +88,7 @@ from fastapi import Security
 from auth.auth import check_token
 
 @router.get("/")
-def get_endpoint(token: Annotated[str, Security(check_token, scopes = ['superuser'])]):
+def get_endpoint(token: Annotated[dict, Security(check_token, scopes = ['superuser'])]):
     ...
 ```
 

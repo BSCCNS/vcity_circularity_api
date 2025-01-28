@@ -1,7 +1,7 @@
 # fake_db.py
 
 import json
-
+import os
 # Class that loads the fake user database (to be deprecated soon)
 
 
@@ -19,6 +19,8 @@ class Database:
             return json.loads(data)
 
 
-db_ob = Database("data/users_db_fake.json")
+current_working_directory = os.getcwd()
+file_path = os.path.join(current_working_directory, 'src', 'cicloapi', 'data', 'users_db_fake.json')
+db_ob = Database(file_path)
 
 users_db = db_ob.db
