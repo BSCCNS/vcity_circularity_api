@@ -5,16 +5,16 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Copy the requirements file into the container
-COPY requirements.txt .
+COPY dist/ .
+
+COPY src/cicloapi/data/users_db_fake.json /app/src/cicloapi/data/
+RUN chmod 644 /app/src/cicloapi/data/users_db_fake.json
 
 # Install the Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the rest of the application code into the container
-COPY backend/ .
+RUN pip install cicloapi-0.1-py3-none-any.whl
 
 # Expose the port that the application will run on
 EXPOSE 8000
 
 # Command to run the application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["cicloapi"]

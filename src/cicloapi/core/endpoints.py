@@ -2,10 +2,10 @@
 
 from typing import Annotated
 from fastapi import Depends, APIRouter
-from schemas import schemas
+from cicloapi.schemas import schemas
 import asyncio
 import logging
-from auth.auth import check_token
+from cicloapi.auth.auth import check_token
 from fastapi.responses import FileResponse
 import datetime
 import uuid

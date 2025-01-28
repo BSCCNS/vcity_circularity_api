@@ -1,10 +1,9 @@
 # routers.py
 
 from fastapi import APIRouter, Security
-from auth import auth
-from core import endpoints
-from user import superuser_endpoints
-from auth import auth
+from cicloapi.auth import auth
+from cicloapi.core import endpoints
+from cicloapi.user import superuser_endpoints
 
 # We define a router that collects everything together
 api_router = APIRouter()

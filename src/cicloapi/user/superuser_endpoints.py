@@ -1,7 +1,7 @@
 # superuser_endpoints.py
 
 from fastapi import APIRouter, HTTPException, status
-from core.config import settings
+from cicloapi.core.config import settings
 from fastapi.responses import JSONResponse
 
 
