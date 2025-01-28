@@ -1,4 +1,5 @@
 # endpoints.py
+
 from typing import Annotated
 from fastapi import Depends, APIRouter
 from schemas import schemas
@@ -8,12 +9,12 @@ from auth.auth import check_token
 from fastapi.responses import FileResponse
 import datetime
 import uuid
-from core.config import settings
+
 
 logger = logging.getLogger('uvicorn.error')
 tasks = {}
 
-router = APIRouter(prefix='/tasks')
+router = APIRouter()
 
 
 
