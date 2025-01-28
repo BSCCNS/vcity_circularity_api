@@ -1,24 +1,24 @@
-# Skeletor
-**Generic skeleton for API using FastAPI.**
+# CicloAPI
+**API for the ciclovias project**
 
 ## Instructions
 
 ### Docker
 
-1. Build the docker container by running `docker build -t skeletor .`.
-2. Run the docker container by `docker run -p 8000:8000 skeletor`.
+1. Build the docker container by running `docker build -t cicloapi .`.
+2. Run the docker container by `docker run -p 8000:8000 cicloapi`.
 3. The API runs by default in `localhost:8000`.
 
 
 ### Local execution
 1. Clone the repository.
-2. If not installed install uv `pipx install uv`
-3. Run scripts with `uv run my_script.py`. it creates an venv from pyproject.toml and runs the script. 
-4. Run the server with uvicorn `uvicorn main:app`. Add the flag `--reload` for automatic reloading when testing.
+2. If not installed, install uv `pipx install uv`
+3. Run `pip install -e .` for local installation with editable properties. 
+4. Run the server with `cicloapi`.
 5. The API runs by default in `localhost:8000`.
 
 
-## Overview
+## Overview (OLD, needs to be updated)
 
 ```bash
 ├── backend/
