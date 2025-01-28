@@ -5,6 +5,7 @@ from schemas import schemas
 import asyncio
 import logging
 from auth.auth import check_token
+from fastapi.responses import FileResponse
 import datetime
 import uuid
 from core.config import settings
@@ -12,7 +13,8 @@ from core.config import settings
 logger = logging.getLogger('uvicorn.error')
 tasks = {}
 
-router = APIRouter()
+router = APIRouter(prefix='/tasks')
+
 
 
 ###########
@@ -20,12 +22,12 @@ router = APIRouter()
 ###########
 
 # Endpoint to check tasks running
-@router.get("/tasks")
+@router.get("/list")
 async def check_tasks(token: Annotated[dict, Depends(check_token)]):
     '''
     Checks which tasks created by the user are being executed in the backend.
     Parameters:
-        token (str): Authenticaton token of bearer type.
+        token (dict): Decoded authentication token.
     Return:
         list[dict]: Dictionary containing the tasks. Task IDs are used as keys and values indicate starting time.
     '''
@@ -78,25 +80,26 @@ async def run_model(input: schemas.InputData, token: Annotated[dict, Depends(che
 async def stop_model(task_id: str, token: Annotated[dict, Depends(check_token)]):
     '''
     Stops a running task.
-    Parameter:
+    Parameters:
         task_id (str): ID of the task to stop.
-        token (str): Authenticaton token of bearer type.
+        token (dict): Decoded authenticaton token.
     Return:
         (JSON): Confirmation of cancellation.
     '''
     
-    user = token['user']
     task_ob = tasks.get(task_id)
-    logger.info(task_ob)
-
+    
+    try:
+        user = token['user']
+    except:
+        raise HTTPException(status_code=404, detail="No task with ID "+ task_id)
+    
     if not user==task_ob.user:
         raise HTTPException(status_code=404, detail="Access forbidden")
-
 
     task = task_ob.task
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
-
     if task.done():
         raise HTTPException(status_code=400, detail="Task already completed")
 
@@ -109,3 +112,30 @@ async def stop_model(task_id: str, token: Annotated[dict, Depends(check_token)])
         tasks.pop(task_id, None)  # Clean up the task from the dictionary
 
     return {"status": "task cancelled", "task_id": task_id}
+
+
+# Endpoint to download the map
+
+@router.get("/map/{task_id}")
+async def download_map(task_id: str, token: Annotated[dict, Depends(check_token)]):
+    '''
+    Streams the download of the map stored in disk for the task with ID equal to task_id.
+    Parameters:
+        task_id (str): ID of the task to stop.
+        token (dict): Decoded authenticaton token.
+    Return:
+        (FileResponse): Map file in jpeg format.
+
+    '''
+
+    task_ob = tasks.get(task_id)
+    
+    try:
+        user = token['user']
+    except:
+        raise HTTPException(status_code=404, detail="No task with ID "+ task_id)
+    
+    if not user==task_ob.user:
+        raise HTTPException(status_code=404, detail="Access forbidden")
+
+    return FileResponse('data/images.jpeg')

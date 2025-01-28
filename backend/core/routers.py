@@ -9,7 +9,7 @@ from auth.auth import *
 # We define a router that collects everything together
 api_router = APIRouter()
 api_router.include_router(auth.router, prefix="")  # Security
-api_router.include_router(endpoints.router, prefix="")  # Generic endpoint
+api_router.include_router(endpoints.router, prefix="")  # API endpoints
 api_router.include_router(
     superuser_endpoints.router,
     prefix="/superuser",
