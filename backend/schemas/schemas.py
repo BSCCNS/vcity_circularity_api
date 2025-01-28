@@ -1,5 +1,6 @@
-from pydantic import BaseModel
-
+from pydantic import BaseModel, Field, ConfigDict
+from typing import Optional
+import asyncio
 
 class InputData(BaseModel):
     prune_measure: int 
@@ -10,6 +11,8 @@ class InputData(BaseModel):
 
 
 class ModelTask(BaseModel):
-    task: object
+    task : Optional[asyncio.Task] = Field(default=None, exclude=True)
     user: str
     start_time: str
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)

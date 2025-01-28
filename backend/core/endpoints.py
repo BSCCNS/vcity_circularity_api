@@ -6,7 +6,8 @@ import asyncio
 import logging
 from auth.auth import check_token
 import datetime
-import jwt
+import uuid
+from core.config import settings
 
 logger = logging.getLogger('uvicorn.error')
 tasks = {}
@@ -20,7 +21,7 @@ router = APIRouter()
 
 # Endpoint to check tasks running
 @router.get("/tasks")
-async def check_tasks(token: Annotated[str, Depends(check_token)]):
+async def check_tasks(token: Annotated[dict, Depends(check_token)]):
     '''
     Checks which tasks created by the user are being executed in the backend.
     Parameters:
@@ -28,38 +29,38 @@ async def check_tasks(token: Annotated[str, Depends(check_token)]):
     Return:
         list[dict]: Dictionary containing the tasks. Task IDs are used as keys and values indicate starting time.
     '''
-    payload = jwt.decode(token, settings.SECRET_KEY, algorithms=settings.ALGORITHM)
-    user = payload['username']
 
-    list_dict =[]
+    user = token['user']
+
+    list_dict ={}
 
     for key in tasks.keys():
         task_ob = tasks[key]
-        if task_ob['user'] == user:
-            list_dict(key) = task_ob['time']
+        if task_ob.user == user:
+            list_dict[key] = task_ob.start_time
 
     return list_dict
 
 # Endpoint to run the task 
 @router.post("/run")
-async def run_model(input: schemas.InputData, token: Annotated[str, Depends(check_token)]):
+async def run_model(input: schemas.InputData, token: Annotated[dict, Depends(check_token)]):
     '''
     Starts execution of a model task.
     Parameters:
         input (JSON): Input parameters for the model (see InputData schema).
-        token (str): Authenticaton token of bearer type.
+        token (dict): Decoded authenticaton token.
     Return:
         (JSON): ID of the task.
     '''
     #Check user
-    payload = jwt.decode(token, settings.SECRET_KEY, algorithms=settings.ALGORITHM)
-    user = payload['username']
+    
+    user = token['user']
     task_id = str(uuid.uuid4())  # Generate a unique ID for the task
     logger.info(f'Starting run with task ID: {task_id}')
 
     async def model_task(task_id):
         try:
-            await asyncio.sleep(10)  # Fake wait. Replace with model execution.
+            await asyncio.sleep(1000)  # Fake wait. Replace with model execution.
             logger.info(f'Run with task ID: {task_id} finished')
         except asyncio.CancelledError:
             logger.info(f'Run with task ID: {task_id} cancelled')
@@ -67,14 +68,14 @@ async def run_model(input: schemas.InputData, token: Annotated[str, Depends(chec
 
     time = str(datetime.datetime.now())
     task = asyncio.create_task(model_task(task_id))
-    task_ob = schemas.ModelTask(task=task, user=user, time=time)
+    task_ob = schemas.ModelTask(task=task, user=user, start_time=time)
     tasks[task_id] = task_ob
     return {"task_id": task_id}
 
 
 # Endpoint to stop the task
 @router.delete("/stop/{task_id}")
-async def stop_model(task_id: str, token: Annotated[str, Depends(check_token)]):
+async def stop_model(task_id: str, token: Annotated[dict, Depends(check_token)]):
     '''
     Stops a running task.
     Parameter:
@@ -83,15 +84,16 @@ async def stop_model(task_id: str, token: Annotated[str, Depends(check_token)]):
     Return:
         (JSON): Confirmation of cancellation.
     '''
-    payload = jwt.decode(token, settings.SECRET_KEY, algorithms=settings.ALGORITHM)
-    user = payload['username']
+    
+    user = token['user']
     task_ob = tasks.get(task_id)
+    logger.info(task_ob)
 
-    if not user==task_ob['user']:
+    if not user==task_ob.user:
         raise HTTPException(status_code=404, detail="Access forbidden")
 
 
-    task = task_ob['task']
+    task = task_ob.task
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
 
@@ -106,4 +108,4 @@ async def stop_model(task_id: str, token: Annotated[str, Depends(check_token)]):
     finally:
         tasks.pop(task_id, None)  # Clean up the task from the dictionary
 
-    return {"status": "cancelled", "task_id": task_id}
+    return {"status": "task cancelled", "task_id": task_id}
