@@ -26,19 +26,19 @@ async def check_tasks(token: Annotated[str, Depends(check_token)]):
     Parameters:
         token (str): Authenticaton token of bearer type.
     Return:
-        list[str]: List of the task IDs being executed.
+        list[dict]: Dictionary containing the tasks. Task IDs are used as keys and values indicate starting time.
     '''
     payload = jwt.decode(token, settings.SECRET_KEY, algorithms=settings.ALGORITHM)
     user = payload['username']
 
-    list_tasks =[]
+    list_dict =[]
 
     for key in tasks.keys():
         task_ob = tasks[key]
         if task_ob['user'] == user:
-            list_tasks.append(key)
+            list_dict(key) = task_ob['time']
 
-    return list_tasks
+    return list_dict
 
 # Endpoint to run the task 
 @router.post("/run")
@@ -69,7 +69,7 @@ async def run_model(input: schemas.InputData, token: Annotated[str, Depends(chec
     task = asyncio.create_task(model_task(task_id))
     task_ob = schemas.ModelTask(task=task, user=user, time=time)
     tasks[task_id] = task_ob
-    return {"task_id": task_id, }
+    return {"task_id": task_id}
 
 
 # Endpoint to stop the task
@@ -87,7 +87,7 @@ async def stop_model(task_id: str, token: Annotated[str, Depends(check_token)]):
     user = payload['username']
     task_ob = tasks.get(task_id)
 
-    if not 'user'==task_ob['user']:
+    if not user==task_ob['user']:
         raise HTTPException(status_code=404, detail="Access forbidden")
 
 
