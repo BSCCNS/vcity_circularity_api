@@ -5,13 +5,7 @@ debug = False
 # System
 import csv
 from tqdm.notebook import tqdm
-import time
 from tqdm import tqdm
-
-# Math/Data
-import math
-import numpy as np
-import pandas as pd
 
 # Plotting
 import matplotlib.pyplot as plt
@@ -29,9 +23,8 @@ from shapely.geometry import Polygon
 
 # Local
 
-from backend.models.scripts.functions import fill_holes, extract_relevant_polygon, csv_to_ox, count_and_merge, rotate_grid, reverse_bearing
-from backend.models.parameters.parameters import  gridl, bearingbins, poiparameters, osmnxparameters, snapthreshold
-
+from backend.models.scripts.functions import fill_holes, extract_relevant_polygon, csv_to_ox
+from backend.models.parameters.parameters import poiparameters, snapthreshold
 
 
 

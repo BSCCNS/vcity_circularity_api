@@ -74,22 +74,23 @@ async def run_model(input: schemas.InputData, token: Annotated[dict, Depends(che
 
     async def model_task(task_id):
         try:
-                        # Extract parameters
+            # Extract parameters
             PATH = path.PATH
             sliders = input.sliders
 
             # Execute workflow
             logger.info("Running - Preparing networks")
-            prepare_networks.main(PATH, [input.city])
+            prepare_networks.main(PATH, input.city)
 
             logger.info("Running - Preparing POIs")
-            prepare_pois.main(PATH, [input.city])
+            prepare_pois.main(PATH, input.city)
 
             logger.info("Running - Clustering POIs")
             cluster_pois.main(
-                PATH, [input.city], input.h3_zoom, snapthreshold,
-                sliders[0], sliders[1], sliders[2], sliders[3],
-                sliders[4], sliders[5], sliders[6]
+                PATH, input.city, input.h3_zoom, snapthreshold,
+                sliders["sanidad"], sliders["educacion"], sliders["administracion"], 
+                sliders["aprovisionamiento"], sliders["cultura"], sliders["deporte"], 
+                sliders["transporte"]
             )
 
             logger.info(f'Run with task ID: {task_id} finished')
