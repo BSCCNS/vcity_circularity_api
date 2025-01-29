@@ -10,12 +10,23 @@
 3. The API runs by default in `localhost:8000`.
 
 
-### Local execution
+### Editable instalation
+
 1. Clone the repository.
-2. If not installed, install uv `pipx install uv`
-3. Run `pip install -e .` for local installation with editable properties. 
-4. Run the server with `cicloapi`.
-5. The API runs by default in `localhost:8000`.
+2. If not installed, install uv `pipx install uv`.
+3. Build the package with `uv build`, this will generate the files inside the `dist` folder.
+4. Run `pip install -e .` for local installation with editable properties. 
+5. Run the server with `cicloapi`.
+6. The API runs by default in `localhost:8000`.
+
+### System-wide installation
+
+1. Clone the repository.
+2. If not installed, install uv `pipx install uv`.
+3. Build the package with `uv build`, this will generate the files inside the `dist` folder.
+4. Run `pip install dist/*.whl` to install the whl file. 
+5. Run the server with `cicloapi`.
+6. The API runs by default in `localhost:8000`.
 
 
 ## Overview (OLD, needs to be updated)

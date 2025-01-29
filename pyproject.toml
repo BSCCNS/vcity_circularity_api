@@ -9,10 +9,22 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "bcrypt>=4.2.1",
-    "fastapi",
-    "pyjwt",
-    "python-multipart",
-    "uvicorn",
+    "fastapi==0.115.6",
+    "geojson>=3.2.0",
+    "geopandas>=0.14",
+    "haversine>=2.9.0",
+    "matplotlib>=3.10.0",
+    "opencv-python>=4.11.0.86",
+    "osmnx>=1.9.4",
+    "passlib[bcrypt]==1.7.4",
+    "pathlib>=1.0.1",
+    "pyjwt==2.10.1",
+    "python-igraph>=0.11.8",
+    "python-multipart==0.0.20",
+    "rasterio>=1.4.3",
+    "tqdm>=4.67.1",
+    "uvicorn==0.34.0",
+    "watermark>=2.5.0",
 ]
 
 [build-system]
