@@ -32,19 +32,10 @@ import shapely
 from backend.models.scripts.functions import fill_holes, extract_relevant_polygon, ox_to_csv, compress_file
 from backend.models.parameters.parameters import  networktypes, osmnxparameters
 
-
-
 def main(PATH, cities):
-    
-    # Initialize a list to store timing information
-    timing_data = []
-
-    # File to store the timing information
-    timing_file = PATH["data"] / "01_download_times.csv"
 
     for placeid, placeinfo in tqdm(cities.items(), desc="Cities"):
-        start_time_city = time.time()  # Start timing for the city
-        
+
         if placeinfo["nominatimstring"] != '':
             location = ox.geocoder.geocode_to_gdf(placeinfo["nominatimstring"])
             location = fill_holes(extract_relevant_polygon(placeid, shapely.geometry.shape(location['geometry'][0])))
@@ -66,7 +57,6 @@ def main(PATH, cities):
         
         Gs = {}
         for parameterid, parameterinfo in tqdm(osmnxparameters.items(), desc="Networks", leave=False):
-            start_time_network = time.time()  # Start timing for the network type
             
             for i in range(0, 10):  # retry loop
                 try:
@@ -90,10 +80,6 @@ def main(PATH, cities):
             if parameterinfo['export']:
                 ox_to_csv(Gs[parameterid], PATH["data"] / placeid, placeid, parameterid)
 
-            end_time_network = time.time()  # End timing for the network type
-            network_duration = end_time_network - start_time_network
-            timing_data.append([placeid, parameterid, network_duration])  # Record timing data
-
         # Compose special cases
         parameterid = 'biketrack'
         Gs[parameterid] = nx.compose_all([
@@ -115,18 +101,6 @@ def main(PATH, cities):
         # Simplify and save graphs
         for parameterid in networktypes[:-2]:
             ox_to_csv(ox.simplify_graph(Gs[parameterid]), PATH["data"] / placeid, placeid, parameterid, "_simplified")
-
-        end_time_city = time.time()  # End timing for the city
-        city_duration = end_time_city - start_time_city
-        timing_data.append([placeid, "total_city_time", city_duration])  # Record total time for the city
-
-    # Write timing data to CSV
-    with open(timing_file, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["PlaceID", "NetworkType", "Time (seconds)"])  # CSV header
-        writer.writerows(timing_data)
-
-    print(f"Timing information saved to {timing_file}")
 
     # Compress all data files
     for folder, subfolders, files in os.walk(PATH["data"]):

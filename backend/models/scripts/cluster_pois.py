@@ -176,11 +176,9 @@ def main(
 
             for poi_type in pois.keys():  # Loop through each POI type in the category
                 poi_file = Path(PATH["data"]) / placeid / f"{placeid}_poi_{poi_type}.gpkg"
-                print(poi_file)
-                print(poi_file.exists())
+
                 if poi_file.exists():
                     geo = gpd.read_file(poi_file)
-                    print(geo)
                     geo["poi_source"] = poi_type  # Assign POI type (e.g., 'hospital')
                     geo["category"] = category_name  # Assign category name (e.g., 'sanidad')
                     geo["weight"] = slider_weights.get(category_name, 1)  # Assign slider weight
@@ -204,8 +202,6 @@ def main(
                 .sum()
                 .reset_index(name="weighted_point_count")
             )
-
-            #gdf_hex = gdp.read_file("/media/M2_disk/roger/tomtom/data/h_index_geometries/gdf_hex_intersected.geojson")
 
             # Merge the weighted counts back with the original hexagons
             gdf_hex = gdf_hex.merge(hexagon_counts, on="hex_id", how="left").fillna(0)
@@ -232,12 +228,6 @@ def main(
             # Step 5: Create the final dataframe keeping centroids and exemplar labels
             gdf_hex = gdf_hex[["geometry", "centroid", "weighted_point_count", "cluster", "is_exemplar"]]
 
-            # Step 6: Plot clusters and exemplars
-            ax = gdf_hex.plot(column="cluster", cmap="tab20", legend=True, alpha=0.5, figsize=(10, 6))
-            gdf_hex[gdf_hex["is_exemplar"] == 1].plot(ax=ax, color="red", markersize=50, label="Exemplars")
-            plt.legend()
-            plt.title("Affinity Propagation Clusters with Exemplars (Distance + Point Count)")
-            plt.show()
 
         else:
             print("No POI files found.")
@@ -246,7 +236,7 @@ def main(
 
         # It may need to execute the first cell firts
         # Define the snapping threshold (in meters)
-        snapthreshold = 50  # Adjust this value as needed
+        snapthreshold = 100  # Adjust this value as needed
 
         # Initialize a set to store snapped node IDs
         nnids = set()
