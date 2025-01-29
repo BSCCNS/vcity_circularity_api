@@ -19,6 +19,7 @@ dependencies = [
     "passlib[bcrypt]==1.7.4",
     "pathlib>=1.0.1",
     "pyjwt==2.10.1",
+    "python-dotenv>=1.0.1",
     "python-igraph>=0.11.8",
     "python-multipart==0.0.20",
     "rasterio>=1.4.3",
@@ -34,6 +35,7 @@ packages = ["cicloapi"]
 package-dir = {"" = "src"}
 
 [project.scripts]
+post_install = "cicloapi.install_hook:generate_env_variable"
 cicloapi = "cicloapi.__init__:main"
 
 [tool.setuptools.packages.find]
@@ -45,3 +47,4 @@ include = ["cicloapi*"]
     "src/cicloapi/data/*.json",
     "src/cicloapi/*.py",
 ]
+
