@@ -11,6 +11,18 @@ import datetime
 import uuid
 import os
 
+
+## model imports
+
+import sys
+from pathlib import Path
+
+# Add the 'backend' directory to the module search path
+sys.path.append(str(Path(__file__).resolve().parents[3]))
+
+from backend.models.scripts import path, prepare_networks, prepare_pois, cluster_pois
+from backend.models.parameters.parameters import h3_zoom, snapthreshold
+
 current_working_directory = os.getcwd()
 
 logger = logging.getLogger('uvicorn.error')
@@ -65,7 +77,25 @@ async def run_model(input: schemas.InputData, token: Annotated[dict, Depends(che
 
     async def model_task(task_id):
         try:
-            await asyncio.sleep(1000)  # Fake wait. Replace with model execution.
+            # Extract parameters
+            PATH = path.PATH
+            sliders = input.sliders
+
+            # Execute workflow
+            logger.info("Running - Preparing networks")
+            prepare_networks.main(PATH, input.city)
+
+            logger.info("Running - Preparing POIs")
+            prepare_pois.main(PATH, input.city)
+
+            logger.info("Running - Clustering POIs")
+            cluster_pois.main(
+                PATH, input.city, input.h3_zoom, snapthreshold,
+                sliders["sanidad"], sliders["educacion"], sliders["administracion"], 
+                sliders["aprovisionamiento"], sliders["cultura"], sliders["deporte"], 
+                sliders["transporte"]
+            )
+
             logger.info(f'Run with task ID: {task_id} finished')
         except asyncio.CancelledError:
             logger.info(f'Run with task ID: {task_id} cancelled')

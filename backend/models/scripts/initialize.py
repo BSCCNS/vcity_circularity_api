@@ -1,6 +1,6 @@
 #config
 from pathlib import Path
-from scripts.path import PATH
+from backend.models.scripts.path import PATH
 debug = False
 
 # System
@@ -23,7 +23,7 @@ ox.settings.logs_folder = PATH["logs"]
 
 cities = {}
 current_dir = os.getcwd()
-print("Current working directory:", current_dir)
+#print("Current working directory:", current_dir)
 with open(PATH["parameters"] / 'cities.csv', mode='r', encoding='utf-8') as f:
     csvreader = csv.DictReader(f, delimiter=';')
     for row in csvreader:

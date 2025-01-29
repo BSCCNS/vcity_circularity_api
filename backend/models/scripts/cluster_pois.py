@@ -1,13 +1,12 @@
 #config
 from pathlib import Path
-from scripts.path import PATH
+from backend.models.scripts.path import PATH
 debug = True
 
 
 # System
-import csv
 from tqdm.notebook import tqdm
-import time
+import logging
 from tqdm import tqdm
 from typing import Dict, Union
 
@@ -35,10 +34,19 @@ from shapely.geometry import Polygon
 from tobler.util import h3fy
 
 # Local
-from scripts.functions import fill_holes, extract_relevant_polygon, csv_to_ox, convert_to_h3
-from parameters.parameters import sanidad, educacion, administracion, aprovisionamiento, cultura, deporte, transporte
+from backend.models.scripts.functions import fill_holes, extract_relevant_polygon, csv_to_ox, convert_to_h3
+from backend.models.parameters.parameters import sanidad, educacion, administracion, aprovisionamiento, cultura, deporte, transporte
 
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+console_handler.setFormatter(formatter)
+logger.addHandler(console_handler)
+
+logger = logging.getLogger("uvicorn.error")
 
 # Example categories definition as a dictionary
 categories = {
@@ -121,34 +129,44 @@ def main(
         )
     """
 
+    # Your loop and logic with logger
     for placeid, placeinfo in tqdm(cities.items(), desc="Cities"):
-        print(PATH)
+        logger.info(f"Processing city: {placeid}")
+        logger.debug(f"Path for city {placeid}: {PATH}")
 
         # Print place information
-        print(f"{placeid}: Loading location polygon and generating H3 hexagons")
+        logger.info(f"{placeid}: Loading location polygon and generating H3 hexagons")
 
         ## grab polygon from prepare_pois.py 
         # Check if 'nominatimstring' exists
-        if placeinfo["nominatimstring"]:
-            # Geocode to get the location geometry and extract relevant polygon
-            location = ox.geocoder.geocode_to_gdf(placeinfo["nominatimstring"])
-            location = fill_holes(extract_relevant_polygon(placeid, location.geometry.iloc[0]))
+        if placeinfo.get("nominatimstring"):
+            logger.debug(f"Geocoding location: {placeinfo['nominatimstring']}")
+            try:
+                # Geocode to get the location geometry and extract relevant polygon
+                location = ox.geocoder.geocode_to_gdf(placeinfo["nominatimstring"])
+                location = fill_holes(extract_relevant_polygon(placeid, location.geometry.iloc[0]))
+            except Exception as e:
+                logger.error(f"Error during geocoding for {placeid}: {e}")
+                continue  # Skip to the next city if there is an error
         else:
             # If shapefile is available, read and extract geometry
-            with fiona.open(f"../data/{placeid}/{placeid}.shp") as shp:
-                first = next(iter(shp))
-                try:
-                    location = Polygon(shapely.geometry.shape(first['geometry']))  # Handle if LineString is present
-                except Exception as e:
-                    print(f"Error processing geometry for {placeid}: {e}")
-                    continue  # Skip to the next city if there is an error
-
+            try:
+                with fiona.open(f"../data/{placeid}/{placeid}.shp") as shp:
+                    first = next(iter(shp))
+                    try:
+                        location = Polygon(shapely.geometry.shape(first['geometry']))  # Handle if LineString is present
+                    except Exception as e:
+                        logger.error(f"Error processing geometry for {placeid}: {e}")
+                        continue  # Skip to the next city if there is an error
+            except Exception as e:
+                logger.error(f"Shapefile not found or error reading shapefile for {placeid}: {e}")
+                continue  # Skip to the next city if there is an error
 
         gdf_hex = convert_to_h3(location, h3_zoom)
 
         # Example categories definition as a dictionary
         categories = {
-            "sanidad": sanidad,  # 'sanidad' should be a dictionary of POI types
+            "sanidad": sanidad,
             "educacion": educacion,
             "administracion": administracion,
             "aprovisionamiento": aprovisionamiento,
@@ -172,23 +190,25 @@ def main(
         # Process POIs and perform spatial operations
         for category_name, pois in categories.items():
             if not isinstance(pois, dict):  # Validate that 'pois' is a dictionary
+                logger.error(f"Expected dictionary for category '{category_name}', got {type(pois)}")
                 raise ValueError(f"Expected dictionary for category '{category_name}', got {type(pois)}")
 
             for poi_type in pois.keys():  # Loop through each POI type in the category
                 poi_file = Path(PATH["data"]) / placeid / f"{placeid}_poi_{poi_type}.gpkg"
-                print(poi_file)
-                print(poi_file.exists())
+
                 if poi_file.exists():
+                    logger.info(f"Processing POI: {poi_type} for city {placeid}")
                     geo = gpd.read_file(poi_file)
-                    print(geo)
                     geo["poi_source"] = poi_type  # Assign POI type (e.g., 'hospital')
                     geo["category"] = category_name  # Assign category name (e.g., 'sanidad')
                     geo["weight"] = slider_weights.get(category_name, 1)  # Assign slider weight
                     geodataframes.append(geo)  # Add to the list of GeoDataFrames
-
+                else:
+                    logger.warning(f"POI file {poi_file} not found for city {placeid} and category {category_name}")
 
         # Combine all GeoDataFrames and perform spatial join
         if geodataframes:
+            logger.info(f"Combining {len(geodataframes)} GeoDataFrames for city {placeid}")
             combined_geo = gpd.GeoDataFrame(pd.concat(geodataframes, ignore_index=True))
             combined_geo = combined_geo.to_crs(gdf_hex.crs)
 
@@ -205,80 +225,71 @@ def main(
                 .reset_index(name="weighted_point_count")
             )
 
-            #gdf_hex = gdp.read_file("/media/M2_disk/roger/tomtom/data/h_index_geometries/gdf_hex_intersected.geojson")
-
             # Merge the weighted counts back with the original hexagons
             gdf_hex = gdf_hex.merge(hexagon_counts, on="hex_id", how="left").fillna(0)
-        
-        # Step 1: Extract centroids and point_count
 
+            # Extract centroids and point_count
             gdf_hex["centroid"] = gdf_hex.geometry.centroid
             centroids = np.array([(geom.x, geom.y) for geom in gdf_hex["centroid"]])
             point_counts = gdf_hex["weighted_point_count"].values.reshape(-1, 1)
 
-            # Step 2: Standardize centroids and point_count
+            # Standardize centroids and point_count
             scaler = StandardScaler()
             features = scaler.fit_transform(np.hstack([centroids, point_counts]))
 
-            # Step 3: Apply Affinity Propagation
+            # Apply Affinity Propagation
             ap = AffinityPropagation(random_state=42).fit(features)
             gdf_hex["cluster"] = ap.labels_  # Assign cluster labels to hexagons
 
-            # Step 4: Identify exemplars and create exemplar label
+            # Identify exemplars and create exemplar label
             exemplars_indices = ap.cluster_centers_indices_
             gdf_hex["is_exemplar"] = 0  # Initialize all hexagons as non-exemplars
             gdf_hex.loc[exemplars_indices, "is_exemplar"] = 1  # Mark exemplars
 
-            # Step 5: Create the final dataframe keeping centroids and exemplar labels
+            # Create the final dataframe keeping centroids and exemplar labels
             gdf_hex = gdf_hex[["geometry", "centroid", "weighted_point_count", "cluster", "is_exemplar"]]
-
-            # Step 6: Plot clusters and exemplars
-            ax = gdf_hex.plot(column="cluster", cmap="tab20", legend=True, alpha=0.5, figsize=(10, 6))
-            gdf_hex[gdf_hex["is_exemplar"] == 1].plot(ax=ax, color="red", markersize=50, label="Exemplars")
-            plt.legend()
-            plt.title("Affinity Propagation Clusters with Exemplars (Distance + Point Count)")
-            plt.show()
-
         else:
-            print("No POI files found.")
+            logger.warning(f"No POI files found for city {placeid}")
 
+        # Network processing
+        logger.info(f"Processing network for city {placeid}")
+        try:
+            # It may need to execute the first cell first
+            # Define the snapping threshold (in meters)
+            snapthreshold = 100  # Adjust this value as needed
 
+            # Initialize a set to store snapped node IDs
+            nnids = set()
+            G_caralls = {}
+            G_caralls_simplified = {}
+            locations = {}
 
-        # It may need to execute the first cell firts
-        # Define the snapping threshold (in meters)
-        snapthreshold = 50  # Adjust this value as needed
+            # Load network data
+            G_caralls[placeid] = csv_to_ox(PATH["data"] / placeid, placeid, 'carall')
+            G_caralls[placeid].graph["crs"] = 'epsg:4326'  # Assign CRS for OSMNX compatibility
+            G_caralls_simplified[placeid] = csv_to_ox(PATH["data"] / placeid, placeid, 'carall_simplified')
+            G_caralls_simplified[placeid].graph["crs"] = 'epsg:4326'
 
-        # Initialize a set to store snapped node IDs
-        nnids = set()
-        G_caralls = {}
-        G_caralls_simplified = {}
-        locations = {}
-        G_caralls[placeid] = csv_to_ox(PATH["data"] / placeid, placeid, 'carall')
-        G_caralls[placeid].graph["crs"] = 'epsg:4326'  # Assign CRS for OSMNX compatibility
-        G_caralls_simplified[placeid] = csv_to_ox(PATH["data"] / placeid, placeid, 'carall_simplified')
-        G_caralls_simplified[placeid].graph["crs"] = 'epsg:4326'
+            gdf = gpd.GeoDataFrame(gdf_hex[gdf_hex["is_exemplar"] == 1], geometry='centroid', crs="EPSG:4326")
+            G_carall = G_caralls[placeid]
 
-        gdf = gpd.GeoDataFrame(gdf_hex[gdf_hex["is_exemplar"] == 1], geometry='centroid', crs="EPSG:4326")
-        G_carall = G_caralls[placeid]
+            # Snap points to the nearest nodes in the network
+            nnids = set()
+            for g in gdf['centroid']:
+                n = ox.distance.nearest_nodes(G_carall, g.x, g.y)
+                # Only snap if within the defined threshold
+                if n not in nnids and haversine((g.y, g.x), (G_carall.nodes[n]["y"], G_carall.nodes[n]["x"]), unit="m") <= snapthreshold:
+                    nnids.add(n)
 
-        # Snap points to the nearest nodes in the network
-        nnids = set()
+            nnids_file = Path(PATH["data"]) / placeid / f"{placeid}_nnids_sliders.csv"
+            nnids_file.parent.mkdir(parents=True, exist_ok=True)
+            df = pd.DataFrame({"nnid": list(nnids)})
+            df.to_csv(nnids_file, index=False, header=False)
 
-        for g in gdf['centroid']:
-            n = ox.distance.nearest_nodes(G_carall, g.x, g.y)
-            # Only snap if within the defined threshold
-            if n not in nnids and haversine((g.y, g.x), (G_carall.nodes[n]["y"], G_carall.nodes[n]["x"]), unit="m") <= snapthreshold:
-                nnids.add(n)
+            logger.info(f"Saved snapped node IDs for {placeid} to {nnids_file}")
 
-        pass
-
-        nnids_file = Path(PATH["data"]) / placeid / f"{placeid}_nnids_sliders.csv"
-     
-        nnids_file.parent.mkdir(parents=True, exist_ok=True)
-        df = pd.DataFrame({"nnid": list(nnids)})
-        df.to_csv(nnids_file, index=False, header=False)
-
-        print(nnids)
+        except Exception as e:
+            logger.error(f"Error processing network for {placeid}: {e}")
     
 if __name__ == "__main__":
     main()
