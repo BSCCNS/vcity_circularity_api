@@ -1,9 +1,16 @@
 # config.py
 
 from cicloapi.data.fake_db import users_db
+import os
+from dotenv import load_dotenv
+from pathlib import Path
+
+# Load the environment file
+env_path = Path.home() / ".venv"
+if env_path.exists():
+    load_dotenv(env_path)
 
 # Setting for the API
-
 
 class Settings:
     PROJECT_NAME: str = "CicloAPI"
@@ -21,7 +28,7 @@ class Settings:
     }
 
     # Setting for token encoding (the secret key is Hex 32)
-    SECRET_KEY = "536813181b97e9b63698643c2c8b4edc44b78ca41071a1c92bc9ebdbc09c32de"
+    SECRET_KEY = os.getenv("SECRET_KEY")
     ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 15
 
