@@ -18,7 +18,7 @@ if __name__ == '__main__':
     prepare_networks.main(PATH, cities)
 
     print("Running 02.py")
-    #prepare_pois.main(PATH, cities)
+    prepare_pois.main(PATH, cities)
 
     print("Running 03.py")
     cluster_pois.main(PATH, cities, h3_zoom, snapthreshold, sanidad_slider, educacion_slider, administracion_slider, aprovisionamiento_slider,cultura_slider, deporte_slider, transporte_slider)

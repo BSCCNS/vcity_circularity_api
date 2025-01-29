@@ -1,6 +1,6 @@
 
 #config
-from scripts.path import PATH
+from backend.models.scripts.path import PATH
 debug = False
 
 # System
@@ -29,8 +29,8 @@ import fiona
 import shapely
 
 # Local
-from scripts.functions import fill_holes, extract_relevant_polygon, ox_to_csv, compress_file
-from parameters.parameters import  networktypes, osmnxparameters
+from backend.models.scripts.functions import fill_holes, extract_relevant_polygon, ox_to_csv, compress_file
+from backend.models.parameters.parameters import  networktypes, osmnxparameters
 
 
 

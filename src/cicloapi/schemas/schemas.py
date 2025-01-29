@@ -5,11 +5,12 @@ from typing import Optional
 import asyncio
 
 class InputData(BaseModel):
-    prune_measure: int 
-    prune_quantiles: int
+    city: list[str] = ["viladecans","Viladecans, Barcelona, Spain;esp","viladecans"]
+    prune_measure: str = "betweeness"
+    prune_quantiles: int = 40
     h3_zoom: int = 10
-    sliders: list[int]
-    buffer_walk_distance: int
+    sliders: list[int] = [1,2,2,3,4,5]
+    buffer_walk_distance: int = 500
 
 
 class ModelTask(BaseModel):

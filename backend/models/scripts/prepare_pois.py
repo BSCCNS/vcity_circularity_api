@@ -1,5 +1,5 @@
 #config
-from scripts.path import PATH
+from backend.models.scripts.path import PATH
 debug = False
 
 # System
@@ -28,8 +28,8 @@ import pyproj
 from shapely.geometry import Polygon
 
 # Local
-from scripts.functions import fill_holes, extract_relevant_polygon, csv_to_ox, count_and_merge, rotate_grid, reverse_bearing
-from parameters.parameters import  gridl, bearingbins, poiparameters, osmnxparameters, snapthreshold
+from backend.models.scripts.functions import fill_holes, extract_relevant_polygon, csv_to_ox, count_and_merge, rotate_grid, reverse_bearing
+from backend.models.parameters.parameters import  gridl, bearingbins, poiparameters, osmnxparameters, snapthreshold
 
 
 

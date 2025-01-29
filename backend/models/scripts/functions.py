@@ -1,7 +1,7 @@
 from pathlib import Path
-from scripts.path import PATH
+from backend.models.scripts.path import PATH
 #from scripts.initialize import *
-from parameters.parameters import  SERVER, plotparam
+from backend.models.parameters.parameters import  SERVER, plotparam
 
 # System
 import copy

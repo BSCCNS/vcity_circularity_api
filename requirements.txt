@@ -17,4 +17,5 @@ tqdm
 geojson
 pathlib
 opencv-python
+h3
 

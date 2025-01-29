@@ -1,6 +1,6 @@
 #config
 from pathlib import Path
-from scripts.path import PATH
+from backend.models.scripts.path import PATH
 debug = True
 
 
@@ -35,8 +35,8 @@ from shapely.geometry import Polygon
 from tobler.util import h3fy
 
 # Local
-from scripts.functions import fill_holes, extract_relevant_polygon, csv_to_ox, convert_to_h3
-from parameters.parameters import sanidad, educacion, administracion, aprovisionamiento, cultura, deporte, transporte
+from backend.models.scripts.functions import fill_holes, extract_relevant_polygon, csv_to_ox, convert_to_h3
+from backend.models.parameters.parameters import sanidad, educacion, administracion, aprovisionamiento, cultura, deporte, transporte
 
 
 

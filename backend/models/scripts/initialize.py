@@ -1,6 +1,6 @@
 #config
 from pathlib import Path
-from scripts.path import PATH
+from backend.models.scripts.path import PATH
 debug = False
 
 # System
