@@ -9,6 +9,8 @@ from cicloapi.auth.auth import check_token
 from fastapi.responses import FileResponse
 import datetime
 import uuid
+import os
+
 
 ## model imports
 
@@ -21,6 +23,7 @@ sys.path.append(str(Path(__file__).resolve().parents[3]))
 from backend.models.scripts import path, prepare_networks, prepare_pois, cluster_pois
 from backend.models.parameters.parameters import h3_zoom, snapthreshold
 
+current_working_directory = os.getcwd()
 
 logger = logging.getLogger('uvicorn.error')
 tasks = {}
@@ -167,5 +170,7 @@ async def download_map(task_id: str, token: Annotated[dict, Depends(check_token)
     
     if not user==task_ob.user:
         raise HTTPException(status_code=404, detail="Access forbidden")
-
-    return FileResponse('data/images.jpeg')
+    
+    file_path = os.path.join(current_working_directory, 'src', 'cicloapi', 'data', 'images.jpeg')
+    
+    return FileResponse(file_path)
