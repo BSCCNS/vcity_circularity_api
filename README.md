@@ -16,8 +16,9 @@
 2. If not installed, install uv `pipx install uv`.
 3. Build the package with `uv build`, this will generate the files inside the `dist` folder.
 4. Run `pip install -e .` for local installation with editable properties. 
-5. Run the server with `cicloapi`.
-6. The API runs by default in `localhost:8000`.
+5. Execute command `post_install` to setup a SECRET_KEY.
+6. Run the server with `cicloapi`.
+7. The API runs by default in `localhost:8000`.
 
 ### System-wide installation
 

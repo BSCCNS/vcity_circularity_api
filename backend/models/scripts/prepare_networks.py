@@ -19,7 +19,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
-print("PATH:", PATH)
 # Geo
 import osmnx as ox
 ox.settings.log_file = True

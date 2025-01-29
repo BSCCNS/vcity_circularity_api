@@ -1555,5 +1555,3 @@ def ig_to_shapely(G):
     return G_shapely
 
 
-
-print("Loaded functions.\n")
