@@ -58,6 +58,46 @@ async def check_tasks(token: Annotated[dict, Depends(check_token)]):
 
     return list_dict
 
+# Endpoint to setup the city (download OSM data) 
+@router.post("/city_setup")
+async def city_setup(input: schemas.InputCity, token: Annotated[dict, Depends(check_token)]):
+    '''
+    Starts execution of a model task.
+    Parameters:
+        input (JSON): Input parameters for the model (see InputData schema).
+        token (dict): Decoded authenticaton token.
+    Return:
+        (JSON): ID of the task.
+    '''
+    #Check user
+    
+    user = token['user']
+    task_id = str(uuid.uuid4())  # Generate a unique ID for the task
+    logger.info(f'Starting run with task ID: {task_id}')
+
+    async def setup_task(task_id):
+        try:
+            # Extract parameters
+            PATH = path.PATH
+
+            # Execute workflow
+            logger.info("Running - Preparing networks")
+            prepare_networks.main(PATH, input.city)
+
+            logger.info("Running - Preparing POIs")
+            prepare_pois.main(PATH, input.city)
+
+            logger.info(f'Run with task ID: {task_id} finished')
+        except asyncio.CancelledError:
+            logger.info(f'Run with task ID: {task_id} cancelled')
+            raise  # Propagate the cancellation exception
+
+    time = str(datetime.datetime.now())
+    task = asyncio.create_task(setup_task(task_id))
+    task_ob = schemas.ModelTask(task=task, user=user, start_time=time)
+    tasks[task_id] = task_ob
+    return {"task_id": task_id}
+
 # Endpoint to run the task 
 @router.post("/run")
 async def run_model(input: schemas.InputData, token: Annotated[dict, Depends(check_token)]):
@@ -80,13 +120,6 @@ async def run_model(input: schemas.InputData, token: Annotated[dict, Depends(che
             # Extract parameters
             PATH = path.PATH
             sliders = input.sliders
-
-            # Execute workflow
-            logger.info("Running - Preparing networks")
-            prepare_networks.main(PATH, input.city)
-
-            logger.info("Running - Preparing POIs")
-            prepare_pois.main(PATH, input.city)
 
             logger.info("Running - Clustering POIs")
             cluster_pois.main(
