@@ -11,7 +11,7 @@ class Settings:
         "API for the ciclovias project."
     )
     CONTACT: dict[str] = {"name": "M. Herrero", "e-mail": "mherrero@bsc.es"}
-    PROJECT_VERSION: str = "0.0.1"
+    PROJECT_VERSION: str = "0.2"
     USERS_DB = users_db
 
     # Scopes for user authorization
