@@ -1,3 +1,4 @@
 __pycache__
 .venv
-/bikenwgrowth_external/
+bikenwgrowth_external/
+cache/
