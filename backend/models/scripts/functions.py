@@ -8,6 +8,7 @@ import copy
 import csv
 import os
 import pickle
+import json
 import itertools
 import random
 import zipfile
@@ -1512,15 +1513,17 @@ def write_result(path_output, task_id, res, mode, placeid, prune_measure, suffix
                 w.writerows(zip(*res.values()))
             except:  # dict with single values
                 w.writerow(res.values())
-        elif mode == "dictnested":
-            # Writing a nested dictionary to CSV
-            fields = ['network'] + list(dictnested.keys())
-            w = csv.DictWriter(f, fieldnames=fields)
-            w.writeheader()
-            for key, val in sorted(res.items()):
-                row = {'network': key}
-                row.update(val)
-                w.writerow(row)
+
+        elif mode == "geojson":
+            geojson_data = {}
+            for key, val in res.items():
+                if isinstance(val, list) and all(isinstance(item, ig.Graph) for item in val):
+                    geojson_data[key] = [ig_to_geojson(item) for item in val]
+                elif isinstance(val, ig.Graph):
+                    geojson_data[key] = ig_to_geojson(val)
+                else:
+                    geojson_data[key] = val
+            json.dump(geojson_data, f, indent=4)
 
 
 def gdf_to_geojson(gdf, properties):

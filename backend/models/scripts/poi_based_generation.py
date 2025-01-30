@@ -76,10 +76,10 @@ def main(
             "MST": MST,
             "MST_abstract": MST_abstract
         }
-        print(results)
+
         path_output = PATH["task_output"]
-        logger.info(f"{placeid}: Writing results to pickle")
-        write_result(path_output, task_id, results, "pickle", placeid, prune_measure, ".csv")
+        logger.info(f"{placeid}: Writing results to geojson")
+        write_result(path_output, task_id, results, "geojson", placeid, prune_measure, ".geojson")
 
 if __name__ == "__main__":
     main()
