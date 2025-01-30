@@ -211,7 +211,7 @@ async def download_map(task_id: str, input: schemas.InputData, token: Annotated[
     if user != task_ob.user:
         raise HTTPException(status_code=403, detail="Access forbidden")
     
-    suffix = ".pickle"
+    suffix = ".geojson"
     city_key = list(input.city.keys())[0]
     filename = f"{city_key}_{input.prune_measure}{suffix}"
 

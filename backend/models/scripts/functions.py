@@ -1515,15 +1515,15 @@ def write_result(path_output, task_id, res, mode, placeid, prune_measure, suffix
                 w.writerow(res.values())
 
         elif mode == "geojson":
-            geojson_data = {}
-            for key, val in res.items():
-                if isinstance(val, list) and all(isinstance(item, ig.Graph) for item in val):
-                    geojson_data[key] = [ig_to_geojson(item) for item in val]
-                elif isinstance(val, ig.Graph):
-                    geojson_data[key] = ig_to_geojson(val)
-                else:
-                    geojson_data[key] = val
-            json.dump(geojson_data, f, indent=4)
+                geojson_data = {}
+                for key, val in res.items():
+                    if isinstance(val, list) and all(isinstance(item, ig.Graph) for item in val):
+                        geojson_data[key] = [{"quantile": q, "geometry": ig_to_geojson(item)} for q, item in zip(res["prune_quantiles"], val)]
+                    elif isinstance(val, ig.Graph):
+                        geojson_data[key] = {"geometry": ig_to_geojson(val)}
+                    else:
+                        geojson_data[key] = val
+                json.dump(geojson_data, f, indent=4)
 
 
 def gdf_to_geojson(gdf, properties):
