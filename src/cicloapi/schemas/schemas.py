@@ -4,6 +4,9 @@ from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, Dict
 import asyncio
 
+class InputCity(BaseModel):
+    city: dict = {"viladecans": {"nominatimstring": "Viladecans, Barcelona, Spain"}}
+
 class InputData(BaseModel):
     city: dict = {"viladecans": {"nominatimstring": "Viladecans, Barcelona, Spain"}}
     prune_measure: str = "betweenness"

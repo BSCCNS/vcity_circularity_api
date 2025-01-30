@@ -6,9 +6,11 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 # Load the environment file
-env_path = Path.home() / ".venv"
-if env_path.exists():
-    load_dotenv(env_path)
+BASE_DIR = Path.cwd()
+ENV_PATH = BASE_DIR / ".env"
+
+if ENV_PATH.exists():
+    load_dotenv(ENV_PATH)
 
 # Setting for the API
 

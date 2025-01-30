@@ -5,7 +5,6 @@ debug = True
 
 
 # System
-from tqdm.notebook import tqdm
 import logging
 from tqdm import tqdm
 from typing import Dict, Union
@@ -62,6 +61,7 @@ categories = {
 
 def main(
     PATH: str,
+    task_id : str,
     cities: Dict[str, Dict[str, Union[str, None]]],
     h3_zoom: int,
     snapthreshold: int,
@@ -281,7 +281,7 @@ def main(
                 if n not in nnids and haversine((g.y, g.x), (G_carall.nodes[n]["y"], G_carall.nodes[n]["x"]), unit="m") <= snapthreshold:
                     nnids.add(n)
 
-            nnids_file = Path(PATH["data"]) / placeid / f"{placeid}_nnids_sliders.csv"
+            nnids_file = Path(PATH["task_output"]) / task_id / f"{placeid}_nnids_sliders.csv"
             nnids_file.parent.mkdir(parents=True, exist_ok=True)
             df = pd.DataFrame({"nnid": list(nnids)})
             df.to_csv(nnids_file, index=False, header=False)

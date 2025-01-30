@@ -8,6 +8,7 @@ import copy
 import csv
 import os
 import pickle
+import json
 import itertools
 import random
 import zipfile
@@ -1484,8 +1485,8 @@ def generate_video(placeid, imgname, vformat = "webm", duplicatelastframe = 5, v
 
 
 
-def write_result(res, mode, placeid, poi_source, prune_measure, suffix, dictnested={}):
-    """Write results (pickle or dict to csv)
+def write_result(path_output, task_id, res, mode, placeid, prune_measure, suffix, dictnested={}):
+    """Write results (pickle, dict to csv, or geojson)
     """
     if mode == "pickle":
         openmode = "wb"
@@ -1493,13 +1494,10 @@ def write_result(res, mode, placeid, poi_source, prune_measure, suffix, dictnest
         openmode = "w"
 
     # Construct the filename based on the provided parameters
-    if poi_source:
-        filename = f"{placeid}_poi_{poi_source}_{prune_measure}{suffix}"
-    else:
-        filename = f"{placeid}_{prune_measure}{suffix}"
+    filename = f"{placeid}_{prune_measure}{suffix}"
 
     # Use pathlib to construct the file path
-    result_path = Path(PATH["results"]) / placeid / filename
+    result_path = Path(path_output) / task_id / filename
 
     # Ensure the directory exists before writing
     result_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1515,15 +1513,17 @@ def write_result(res, mode, placeid, poi_source, prune_measure, suffix, dictnest
                 w.writerows(zip(*res.values()))
             except:  # dict with single values
                 w.writerow(res.values())
-        elif mode == "dictnested":
-            # Writing a nested dictionary to CSV
-            fields = ['network'] + list(dictnested.keys())
-            w = csv.DictWriter(f, fields)
-            w.writeheader()
-            for key, val in sorted(res.items()):
-                row = {'network': key}
-                row.update(val)
-                w.writerow(row)
+
+        elif mode == "geojson":
+                geojson_data = {}
+                for key, val in res.items():
+                    if isinstance(val, list) and all(isinstance(item, ig.Graph) for item in val):
+                        geojson_data[key] = [{"quantile": q, "geometry": ig_to_geojson(item)} for q, item in zip(res["prune_quantiles"], val)]
+                    elif isinstance(val, ig.Graph):
+                        geojson_data[key] = {"geometry": ig_to_geojson(val)}
+                    else:
+                        geojson_data[key] = val
+                json.dump(geojson_data, f, indent=4)
 
 
 def gdf_to_geojson(gdf, properties):
