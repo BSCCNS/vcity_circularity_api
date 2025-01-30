@@ -1,7 +1,7 @@
 # endpoints.py
 
 from typing import Annotated
-from fastapi import Depends, APIRouter
+from fastapi import HTTPException, Depends, APIRouter
 from cicloapi.schemas import schemas
 import asyncio
 import logging
@@ -20,8 +20,9 @@ from pathlib import Path
 # Add the 'backend' directory to the module search path
 sys.path.append(str(Path(__file__).resolve().parents[3]))
 
-from backend.models.scripts import path, prepare_networks, prepare_pois, cluster_pois
-from backend.models.parameters.parameters import h3_zoom, snapthreshold
+
+from backend.models.scripts import path, prepare_networks, prepare_pois, cluster_pois, poi_based_generation
+from backend.models.parameters.parameters import snapthreshold
 
 current_working_directory = os.getcwd()
 
@@ -123,11 +124,14 @@ async def run_model(input: schemas.InputData, token: Annotated[dict, Depends(che
 
             logger.info("Running - Clustering POIs")
             cluster_pois.main(
-                PATH, input.city, input.h3_zoom, snapthreshold,
+                PATH, task_id, input.city, input.h3_zoom, snapthreshold,
                 sliders["sanidad"], sliders["educacion"], sliders["administracion"], 
                 sliders["aprovisionamiento"], sliders["cultura"], sliders["deporte"], 
                 sliders["transporte"]
             )
+
+            poi_based_generation.main(PATH, task_id, input.city, input.prune_measure)
+
 
             logger.info(f'Run with task ID: {task_id} finished')
         except asyncio.CancelledError:
@@ -183,7 +187,7 @@ async def stop_model(task_id: str, token: Annotated[dict, Depends(check_token)])
 # Endpoint to download the map
 
 @router.get("/map/{task_id}")
-async def download_map(task_id: str, token: Annotated[dict, Depends(check_token)]):
+async def download_map(task_id: str, input: schemas.InputData, token: Annotated[dict, Depends(check_token)]):
     '''
     Streams the download of the map stored in disk for the task with ID equal to task_id.
     Parameters:
@@ -191,19 +195,26 @@ async def download_map(task_id: str, token: Annotated[dict, Depends(check_token)
         token (dict): Decoded authenticaton token.
     Return:
         (FileResponse): Map file in jpeg format.
-
     '''
+    PATH = path.PATH
 
     task_ob = tasks.get(task_id)
     
+    if task_ob is None:
+        raise HTTPException(status_code=404, detail="No task with ID " + task_id)
+    
     try:
         user = token['user']
-    except:
-        raise HTTPException(status_code=404, detail="No task with ID "+ task_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Invalid token")
     
-    if not user==task_ob.user:
-        raise HTTPException(status_code=404, detail="Access forbidden")
+    if user != task_ob.user:
+        raise HTTPException(status_code=403, detail="Access forbidden")
     
-    file_path = os.path.join(current_working_directory, 'src', 'cicloapi', 'data', 'images.jpeg')
-    
-    return FileResponse(file_path)
+    suffix = ".pickle"
+    city_key = list(input.city.keys())[0]
+    filename = f"{city_key}_{input.prune_measure}{suffix}"
+
+    # Use pathlib to construct the file path
+    result_path = Path(PATH["task_output"]) / task_id / filename
+    return FileResponse(result_path)

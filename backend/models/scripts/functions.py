@@ -1484,8 +1484,8 @@ def generate_video(placeid, imgname, vformat = "webm", duplicatelastframe = 5, v
 
 
 
-def write_result(res, mode, placeid, poi_source, prune_measure, suffix, dictnested={}):
-    """Write results (pickle or dict to csv)
+def write_result(path_output, task_id, res, mode, placeid, prune_measure, suffix, dictnested={}):
+    """Write results (pickle, dict to csv, or geojson)
     """
     if mode == "pickle":
         openmode = "wb"
@@ -1493,13 +1493,10 @@ def write_result(res, mode, placeid, poi_source, prune_measure, suffix, dictnest
         openmode = "w"
 
     # Construct the filename based on the provided parameters
-    if poi_source:
-        filename = f"{placeid}_poi_{poi_source}_{prune_measure}{suffix}"
-    else:
-        filename = f"{placeid}_{prune_measure}{suffix}"
+    filename = f"{placeid}_{prune_measure}{suffix}"
 
     # Use pathlib to construct the file path
-    result_path = Path(PATH["results"]) / placeid / filename
+    result_path = Path(path_output) / task_id / filename
 
     # Ensure the directory exists before writing
     result_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1518,7 +1515,7 @@ def write_result(res, mode, placeid, poi_source, prune_measure, suffix, dictnest
         elif mode == "dictnested":
             # Writing a nested dictionary to CSV
             fields = ['network'] + list(dictnested.keys())
-            w = csv.DictWriter(f, fields)
+            w = csv.DictWriter(f, fieldnames=fields)
             w.writeheader()
             for key, val in sorted(res.items()):
                 row = {'network': key}
