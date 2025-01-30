@@ -78,7 +78,8 @@ def main(
         }
 
         path_output = PATH["task_output"]
-        logger.info(f"{placeid}: Writing results to geojson")
+        logger.info(f"{placeid}: Writing results to geojson and pickle")
+        write_result(path_output, task_id, results, "pickle", placeid, prune_measure, ".pickle")
         write_result(path_output, task_id, results, "geojson", placeid, prune_measure, ".geojson")
 
 if __name__ == "__main__":
