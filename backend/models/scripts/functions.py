@@ -1514,6 +1514,16 @@ def write_result(path_output, task_id, res, mode, placeid, prune_measure, suffix
             except:  # dict with single values
                 w.writerow(res.values())
 
+        elif mode == "dictnested":
+            # Writing a nested dictionary to CSV
+            fields = ['network'] + list(dictnested.keys())
+            w = csv.DictWriter(f, fields)
+            w.writeheader()
+            for key, val in sorted(res.items()):
+                row = {'network': key}
+                row.update(val)
+                w.writerow(row)
+
         elif mode == "geojson":
                 geojson_data = {}
                 for key, val in res.items():
