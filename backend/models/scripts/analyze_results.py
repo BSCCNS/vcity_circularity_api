@@ -111,10 +111,12 @@ def main(
 
             # Save covers
             logger.info(f"{placeid}: Saving covers")
+            print(covs)
             write_result(path_output, task_id, covs, "pickle", placeid, "", "existing_covers.pickle")
 
             # Write to CSV
             logger.info(f"{placeid}: Writing results to CSV")
+            print(output_place)
             write_result(path_output, task_id, output_place, "dictnested", placeid, "", "existing.csv", empty_metrics)
 
     for placeid, placeinfo in cities.items():
@@ -155,6 +157,8 @@ def main(
         write_result(path_output, task_id, cov_MST, "pickle", placeid, prune_measure, "_cover_mst.pickle")
 
         logger.info(f"{placeid}: Writing results to CSV and GeoJSON")
+        print(output)
+        print(output_MST)
         write_result(path_output, task_id, output, "dict", placeid, prune_measure, ".csv")
         write_result(path_output, task_id, output_MST, "dict", placeid, "", "mst.csv")
 
