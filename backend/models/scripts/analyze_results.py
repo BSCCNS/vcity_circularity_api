@@ -18,7 +18,7 @@ from shapely.geometry import Polygon
 
 # Local
 from backend.models.scripts.functions import csv_to_ig, calculate_metrics_parallel, delete_overlaps, intersect_igraphs, calculate_metrics_additively, write_result
-from backend.models.parameters.parameters import poi_source, prune_measure, networktypes, buffer_walk, numnodepairs
+from backend.models.parameters.parameters import  prune_measure, networktypes, buffer_walk, numnodepairs
 
 # Configure logging
 logger = logging.getLogger(__name__)
