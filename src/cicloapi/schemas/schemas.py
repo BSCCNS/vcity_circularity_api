@@ -23,6 +23,10 @@ class InputData(BaseModel):
     }
     buffer_walk_distance: int = 500
 
+class InputResults(BaseModel):
+    city: dict = {"viladecans": {"nominatimstring": "Viladecans, Barcelona, Spain"}}
+    task_id: str
+
 
 class ModelTask(BaseModel):
     task : Optional[asyncio.Task] = Field(default=None, exclude=True)
