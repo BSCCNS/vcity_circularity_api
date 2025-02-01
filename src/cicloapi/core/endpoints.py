@@ -208,7 +208,7 @@ async def run_analysis(input: schemas.InputResults, token: Annotated[dict, Depen
             cities = input.city
 
             logger.info("Running - Analyzing Metrics")
-            analyze_results.main(PATH, input.task_id, cities)
+            analyze_results.main(PATH, input.task_id, cities, prune_index=input.phase)
 
             logger.info(f'Analysis with task ID: {task_id} finished')
         except asyncio.CancelledError:

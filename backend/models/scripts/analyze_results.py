@@ -34,7 +34,8 @@ logger = logging.getLogger("uvicorn.error")
 def main(
     PATH: str,
     task_id: str,
-    cities: Dict[str, Dict[str, Union[str, None]]]
+    cities: Dict[str, Dict[str, Union[str, None]]],
+    prune_index: int
     )-> None:
     """
     Main function to analyze existing infrastructure and calculate metrics for given cities.
@@ -122,9 +123,10 @@ def main(
 
         # Calculate metrics
         logger.info(f"{placeid}: Calculating metrics additively")
+
         output, covs = calculate_metrics_additively(
             res["GTs"], res["GT_abstracts"], res["prune_quantiles"], G_carall, nnids,
-            buffer_walk, numnodepairs, debug, True, Gexisting
+            buffer_walk, numnodepairs, debug, True, Gexisting, selected_quantiles=res["prune_quantiles"][:prune_index]
         )
         logger.info(f"{placeid}: Calculating metrics in parallel for MST")
         output_MST, cov_MST = calculate_metrics_parallel(
@@ -138,8 +140,7 @@ def main(
         write_result(path_output, task_id, cov_MST, "pickle", placeid, prune_measure, "_cover_mst.pickle")
 
         logger.info(f"{placeid}: Writing results to CSV and GeoJSON")
-        print(output)
-        print(output_MST)
+ 
         write_result(path_output, task_id, output, "dict", placeid, prune_measure, ".csv")
         write_result(path_output, task_id, output_MST, "dict", placeid, "", "mst.csv")
 

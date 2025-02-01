@@ -1399,26 +1399,37 @@ def intersect_igraphs(G1, G2):
     return G_inter
 
 
-def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False, return_cov = True, Gexisting = {}, output = {
-            "length":[],
-            "length_lcc":[],
-            "coverage": [],
-            "directness": [],
-            "directness_lcc": [],
-            "poi_coverage": [],
-            "components": [],
-            "overlap_biketrack": [],
-            "overlap_bikeable": [],
-            "efficiency_global": [],
-            "efficiency_local": [],
-            "efficiency_global_routed": [],
-            "efficiency_local_routed": [],
-            "directness_lcc_linkwise": [],
-            "directness_all_linkwise": []        
-            }):
+def calculate_metrics_additively(Gs, GT_abstracts, prune_quantiles, G_big, nnids, buffer_walk = 500, numnodepairs = 500, verbose = False, return_cov = True, Gexisting = {}, selected_quantiles=None):
     """Calculates all metrics, additively. 
     Coverage differences are calculated in every step instead of the whole coverage.
+    If selected_quantiles is provided, only those quantiles will be calculated.
     """
+
+    # Initialize the output dictionary
+    output = {
+        "length": [],
+        "length_lcc": [],
+        "coverage": [],
+        "directness": [],
+        "directness_lcc": [],
+        "poi_coverage": [],
+        "components": [],
+        "overlap_biketrack": [],
+        "overlap_bikeable": [],
+        "efficiency_global": [],
+        "efficiency_local": [],
+        "efficiency_global_routed": [],
+        "efficiency_local_routed": [],
+        "directness_lcc_linkwise": [],
+        "directness_all_linkwise": []
+    }
+
+    # Filter Gs, GT_abstracts, and prune_quantiles based on selected_quantiles
+    if selected_quantiles is not None:
+        selected_indices = [i for i, q in enumerate(prune_quantiles) if q in selected_quantiles]
+        Gs = [Gs[i] for i in selected_indices]
+        GT_abstracts = [GT_abstracts[i] for i in selected_indices]
+        prune_quantiles = [prune_quantiles[i] for i in selected_indices]
 
     # BICYCLE NETWORKS
     covs = {} # covers using buffer_walk
