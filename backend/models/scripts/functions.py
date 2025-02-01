@@ -1563,7 +1563,7 @@ def write_result(path_output, task_id, res, mode, placeid, prune_measure, suffix
                 geojson_data = {}
                 for key, val in res.items():
                     if isinstance(val, list) and all(isinstance(item, ig.Graph) for item in val):
-                        geojson_data[key] = [{"quantile": q, "geometry": ig_to_geojson(item)} for q, item in zip(res["prune_quantiles"], val)]
+                        geojson_data[key] = [{"prune_index": idx, "quantile": q, "geometry": ig_to_geojson(item)} for idx, (q, item) in enumerate(zip(res["prune_quantiles"], val))]
                     elif isinstance(val, ig.Graph):
                         geojson_data[key] = {"geometry": ig_to_geojson(val)}
                     else:

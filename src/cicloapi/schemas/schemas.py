@@ -25,6 +25,7 @@ class InputData(BaseModel):
 
 class InputResults(BaseModel):
     city: dict = {"viladecans": {"nominatimstring": "Viladecans, Barcelona, Spain"}}
+    phase: int
     task_id: str
 
 
