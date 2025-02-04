@@ -21,7 +21,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[3]))
 
 
-from backend.models.scripts import path, prepare_networks, prepare_pois, cluster_pois, poi_based_generation
+from backend.models.scripts import path, prepare_networks, prepare_pois, cluster_pois, poi_based_generation, analyze_results, real_city_metrics
 from backend.models.parameters.parameters import snapthreshold
 
 current_working_directory = os.getcwd()
@@ -143,6 +143,84 @@ async def run_model(input: schemas.InputData, token: Annotated[dict, Depends(che
     task_ob = schemas.ModelTask(task=task, user=user, start_time=time)
     tasks[task_id] = task_ob
     return {"task_id": task_id}
+
+
+@router.post("/city_metrics")
+async def run_analysis(input: schemas.InputResults, token: Annotated[dict, Depends(check_token)]):
+    '''
+    Get the metrics for the actual city
+    Parameters:
+        input (JSON): Input parameters for the analysis (see InputData schema).
+        token (dict): Decoded authentication token.
+    Return:
+        (JSON): ID of the task.
+    '''
+    # Check user
+
+    user = token['user']
+    task_id = str(uuid.uuid4())  # Generate a unique ID for the task
+    logger.info(f'Starting run with task ID: {task_id}')
+
+    logger.info(f'Starting analysis with task ID: {task_id}')
+
+    async def analysis_task(task_id):
+        try:
+            # Extract parameters
+            PATH = path.PATH
+            cities = input.city
+
+            logger.info("Running - Analyzing Metrics")
+            real_city_metrics.main(PATH, input.task_id, cities)
+
+            logger.info(f'Analysis with task ID: {task_id} finished')
+        except asyncio.CancelledError:
+            logger.info(f'Analysis with task ID: {task_id} cancelled')
+            raise  # Propagate the cancellation exception
+
+    time = str(datetime.datetime.now())
+    task = asyncio.create_task(analysis_task(task_id))
+    task_ob = schemas.ModelTask(task=task, user=user, start_time=time)
+    tasks[task_id] = task_ob
+    return {"task_id": task_id}
+
+@router.post("/run_analysis")
+async def run_analysis(input: schemas.InputResults, token: Annotated[dict, Depends(check_token)]):
+    '''
+    Starts execution of an analysis task.
+    Parameters:
+        input (JSON): Input parameters for the analysis (see InputData schema).
+        token (dict): Decoded authentication token.
+    Return:
+        (JSON): ID of the task.
+    '''
+    # Check user
+
+    user = token['user']
+    task_id = str(uuid.uuid4())  # Generate a unique ID for the task
+    logger.info(f'Starting run with task ID: {task_id}')
+
+    logger.info(f'Starting analysis with task ID: {task_id}')
+
+    async def analysis_task(task_id):
+        try:
+            # Extract parameters
+            PATH = path.PATH
+            cities = input.city
+
+            logger.info("Running - Analyzing Metrics")
+            analyze_results.main(PATH, input.task_id, cities, prune_index=input.phase)
+
+            logger.info(f'Analysis with task ID: {task_id} finished')
+        except asyncio.CancelledError:
+            logger.info(f'Analysis with task ID: {task_id} cancelled')
+            raise  # Propagate the cancellation exception
+
+    time = str(datetime.datetime.now())
+    task = asyncio.create_task(analysis_task(task_id))
+    task_ob = schemas.ModelTask(task=task, user=user, start_time=time)
+    tasks[task_id] = task_ob
+    return {"task_id": task_id}
+
 
 
 # Endpoint to stop the task
