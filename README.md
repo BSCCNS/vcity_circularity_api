@@ -1,25 +1,36 @@
-# Skeletor
-**Generic skeleton for API using FastAPI.**
+# CicloAPI
+**API for the ciclovias project**
 
 ## Instructions
 
 ### Docker
 
-1. Build the docker container by running `docker build -t skeletor .`.
-2. Run the docker container by `docker run -p 8000:8000 skeletor`.
+1. Build the docker container by running `docker build -t cicloapi .`.
+2. Run the docker container by `docker run -p 8000:8000 cicloapi`.
 3. The API runs by default in `localhost:8000`.
 
 
-### Local execution
+### Editable instalation
+
 1. Clone the repository.
-2. Create a virtual environment with `python -m venv venv`.
-3. Enter into the backend folder `cd backend`
-4. Install the requirements with `pip install -r requirements.txt`.
-5. Run the server with uvicorn `uvicorn main:app`. Add the flag `--reload` for automatic reloading when testing.
+2. If not installed, install uv `pipx install uv`.
+3. Build the package with `uv build`, this will generate the files inside the `dist` folder.
+4. Run `pip install -e .` for local installation with editable properties. 
+5. Execute command `post_install` to setup a SECRET_KEY.
+6. Run the server with `cicloapi`.
+7. The API runs by default in `localhost:8000`.
+
+### System-wide installation
+
+1. Clone the repository.
+2. If not installed, install uv `pipx install uv`.
+3. Build the package with `uv build`, this will generate the files inside the `dist` folder.
+4. Run `pip install dist/*.whl` to install the whl file. 
+5. Run the server with `cicloapi`.
 6. The API runs by default in `localhost:8000`.
 
 
-## Overview
+## Overview (OLD, needs to be updated)
 
 ```bash
 ├── backend/
@@ -69,7 +80,7 @@ Users must authenticate in order to get a token that allows them to perform call
 
 The fake database provides two users: `heman` with superuser acces, and `manatarms` being a normal user. Both have the password `password`.
 
-Endpoints must check authenticity of the token through a dependence. See example:
+Endpoints must check authenticity of the token through a dependence (check_token returns the decoded token). See example:
 
 ```python
 from typing import Annotated
@@ -77,7 +88,7 @@ from fastapi import Depends
 from auth.auth import check_token
 
 @router.get("/")
-def get_endpoint(token: Annotated[str, Depends(check_token)]):
+def get_endpoint(token: Annotated[dict, Depends(check_token)]):
     ...
 ```
 
@@ -89,7 +100,7 @@ from fastapi import Security
 from auth.auth import check_token
 
 @router.get("/")
-def get_endpoint(token: Annotated[str, Security(check_token, scopes = ['superuser'])]):
+def get_endpoint(token: Annotated[dict, Security(check_token, scopes = ['superuser'])]):
     ...
 ```
 

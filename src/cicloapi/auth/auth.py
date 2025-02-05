@@ -1,4 +1,5 @@
 # auth.py
+
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 from fastapi import Depends, HTTPException, APIRouter, status
@@ -7,10 +8,10 @@ from fastapi.security import (
     OAuth2PasswordBearer,
     SecurityScopes,
 )
-from auth.hashing import *
-from schemas.user_schema import *
-from schemas.token_schema import *
-from core.config import settings
+from cicloapi.auth.hashing import Hasher
+from cicloapi.schemas.user_schema import UserInDB
+from cicloapi.schemas.token_schema import Token, TokenData
+from cicloapi.core.config import settings
 import jwt
 
 
