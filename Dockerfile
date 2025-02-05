@@ -16,4 +16,4 @@ RUN uv pip install cicloapi-0.2-py3-none-any.whl --system
 EXPOSE 8000
 
 # Command to run the application
-CMD ["cicloapi"]
+CMD post_install && cicloapi
