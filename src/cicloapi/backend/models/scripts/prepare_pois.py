@@ -3,12 +3,9 @@ from backend.models.scripts.path import PATH
 debug = False
 
 # System
-import csv
 from tqdm.notebook import tqdm
 from tqdm import tqdm
 
-# Plotting
-import matplotlib.pyplot as plt
 
 # Geo
 import osmnx as ox
@@ -18,7 +15,6 @@ ox.settings.logs_folder = PATH["logs"]
 import fiona
 import shapely
 from haversine import haversine
-import pyproj
 from shapely.geometry import Polygon
 
 # Local
@@ -34,6 +30,7 @@ def main(PATH, cities):
     G_caralls_simplified = {}
     locations = {}
 
+    
     # Iterate through cities to load polygons and graphs
     for placeid, placeinfo in tqdm(cities.items(), desc="Cities"):
 

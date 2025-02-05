@@ -16,6 +16,10 @@ PATH = {
     "logs": BASE_DIR / "bikenwgrowth_external" / "logs",
     "task_output": API_DIR / "data" / "endpoints"
 }
+
+for path in PATH.values():
+    path.mkdir(parents=True, exist_ok=True)
+
 # Example usage of a path
 #print("Current working directory:", Path.cwd())
 #print("Loaded PATH:", PATH)

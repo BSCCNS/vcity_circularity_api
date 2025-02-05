@@ -4,7 +4,6 @@ from backend.models.scripts.path import PATH
 debug = False
 
 # System
-import csv
 import os
 import logging
 from tqdm import tqdm
@@ -41,7 +40,7 @@ logger = logging.getLogger("uvicorn.error")
 
 def main(PATH, cities):
     logger.info("Starting network processing...")
-
+    logger.info(cities.items())
     for placeid, placeinfo in tqdm(cities.items(), desc="Cities"):
         logger.info(f"Processing city: {placeid}")
 
