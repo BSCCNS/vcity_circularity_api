@@ -155,3 +155,123 @@
 2025-02-05 09:41:02,682 INFO OSMnx graph_from_polygon returned graph with 804 nodes and 1,044 edges
 2025-02-05 09:41:02,686 INFO OSMnx Created nodes GeoDataFrame from graph
 2025-02-05 09:41:02,695 INFO OSMnx Created edges GeoDataFrame from graph
+2025-02-05 10:27:09,168 INFO OSMnx Retrieved response from cache file 'cache/bc1d17f0b99fa4c6c2ab0b67e2502731521d061a.json'
+2025-02-05 10:27:09,225 INFO OSMnx Created GeoDataFrame with 1 rows from 1 queries
+2025-02-05 10:27:09,292 INFO OSMnx Projected GeoDataFrame to 'EPSG:32631 / WGS 84 / UTM zone 31N'
+2025-02-05 10:27:09,297 INFO OSMnx Projected GeoDataFrame to 'EPSG:4326 / WGS 84'
+2025-02-05 10:27:09,344 INFO OSMnx Projected GeoDataFrame to 'EPSG:32631 / WGS 84 / UTM zone 31N'
+2025-02-05 10:27:09,346 INFO OSMnx Projected GeoDataFrame to 'EPSG:4326 / WGS 84'
+2025-02-05 10:27:09,347 INFO OSMnx Requesting data from API in 1 request(s)
+2025-02-05 10:27:09,369 INFO OSMnx Retrieved response from cache file 'cache/909104e41b152e40b9d587f2b2943ace504afbd3.json'
+2025-02-05 10:27:09,370 INFO OSMnx Retrieved all data from API in 1 request(s)
+2025-02-05 10:27:09,370 INFO OSMnx Creating graph from 1,973 OSM nodes and 302 OSM ways...
+2025-02-05 10:27:09,378 INFO OSMnx Created graph with 1,973 nodes and 2,692 edges
+2025-02-05 10:27:09,476 INFO OSMnx Added length attributes to graph edges
+2025-02-05 10:27:09,477 INFO OSMnx Identifying all nodes that lie outside the polygon...
+2025-02-05 10:27:09,483 INFO OSMnx Created nodes GeoDataFrame from graph
+2025-02-05 10:27:09,484 INFO OSMnx Built r-tree spatial index for 1,973 geometries
+2025-02-05 10:27:09,487 INFO OSMnx Accelerating r-tree with 4 quadrats
+2025-02-05 10:27:09,503 INFO OSMnx Identified 1,613 geometries inside polygon
+2025-02-05 10:27:09,511 INFO OSMnx Removed 360 nodes outside polygon
+2025-02-05 10:27:09,511 INFO OSMnx Truncated graph by polygon
+2025-02-05 10:27:09,512 INFO OSMnx Identifying all nodes that lie outside the polygon...
+2025-02-05 10:27:09,517 INFO OSMnx Created nodes GeoDataFrame from graph
+2025-02-05 10:27:09,518 INFO OSMnx Built r-tree spatial index for 1,613 geometries
+2025-02-05 10:27:09,519 INFO OSMnx Accelerating r-tree with 4 quadrats
+2025-02-05 10:27:09,532 INFO OSMnx Identified 804 geometries inside polygon
+2025-02-05 10:27:09,537 INFO OSMnx Removed 809 nodes outside polygon
+2025-02-05 10:27:09,537 INFO OSMnx Truncated graph by polygon
+2025-02-05 10:27:09,543 INFO OSMnx Counted undirected street segments incident on each node
+2025-02-05 10:27:09,544 INFO OSMnx graph_from_polygon returned graph with 804 nodes and 1,044 edges
+2025-02-05 10:27:09,547 INFO OSMnx Created nodes GeoDataFrame from graph
+2025-02-05 10:27:09,556 INFO OSMnx Created edges GeoDataFrame from graph
+2025-02-05 10:28:46,372 INFO OSMnx Retrieved response from cache file 'cache/bc1d17f0b99fa4c6c2ab0b67e2502731521d061a.json'
+2025-02-05 10:28:46,394 INFO OSMnx Created GeoDataFrame with 1 rows from 1 queries
+2025-02-05 10:28:46,462 INFO OSMnx Projected GeoDataFrame to 'EPSG:32631 / WGS 84 / UTM zone 31N'
+2025-02-05 10:28:46,465 INFO OSMnx Projected GeoDataFrame to 'EPSG:4326 / WGS 84'
+2025-02-05 10:28:46,504 INFO OSMnx Projected GeoDataFrame to 'EPSG:32631 / WGS 84 / UTM zone 31N'
+2025-02-05 10:28:46,505 INFO OSMnx Projected GeoDataFrame to 'EPSG:4326 / WGS 84'
+2025-02-05 10:28:46,506 INFO OSMnx Requesting data from API in 1 request(s)
+2025-02-05 10:28:46,531 INFO OSMnx Retrieved response from cache file 'cache/909104e41b152e40b9d587f2b2943ace504afbd3.json'
+2025-02-05 10:28:46,533 INFO OSMnx Retrieved all data from API in 1 request(s)
+2025-02-05 10:28:46,533 INFO OSMnx Creating graph from 1,973 OSM nodes and 302 OSM ways...
+2025-02-05 10:28:46,541 INFO OSMnx Created graph with 1,973 nodes and 2,692 edges
+2025-02-05 10:28:46,545 INFO OSMnx Added length attributes to graph edges
+2025-02-05 10:28:46,546 INFO OSMnx Identifying all nodes that lie outside the polygon...
+2025-02-05 10:28:46,553 INFO OSMnx Created nodes GeoDataFrame from graph
+2025-02-05 10:28:46,553 INFO OSMnx Built r-tree spatial index for 1,973 geometries
+2025-02-05 10:28:46,555 INFO OSMnx Accelerating r-tree with 4 quadrats
+2025-02-05 10:28:46,571 INFO OSMnx Identified 1,613 geometries inside polygon
+2025-02-05 10:28:46,630 INFO OSMnx Removed 360 nodes outside polygon
+2025-02-05 10:28:46,631 INFO OSMnx Truncated graph by polygon
+2025-02-05 10:28:46,631 INFO OSMnx Identifying all nodes that lie outside the polygon...
+2025-02-05 10:28:46,637 INFO OSMnx Created nodes GeoDataFrame from graph
+2025-02-05 10:28:46,637 INFO OSMnx Built r-tree spatial index for 1,613 geometries
+2025-02-05 10:28:46,638 INFO OSMnx Accelerating r-tree with 4 quadrats
+2025-02-05 10:28:46,652 INFO OSMnx Identified 804 geometries inside polygon
+2025-02-05 10:28:46,658 INFO OSMnx Removed 809 nodes outside polygon
+2025-02-05 10:28:46,658 INFO OSMnx Truncated graph by polygon
+2025-02-05 10:28:46,664 INFO OSMnx Counted undirected street segments incident on each node
+2025-02-05 10:28:46,665 INFO OSMnx graph_from_polygon returned graph with 804 nodes and 1,044 edges
+2025-02-05 10:28:46,669 INFO OSMnx Created nodes GeoDataFrame from graph
+2025-02-05 10:28:46,678 INFO OSMnx Created edges GeoDataFrame from graph
+2025-02-05 10:29:47,943 INFO OSMnx Retrieved response from cache file 'cache/bc1d17f0b99fa4c6c2ab0b67e2502731521d061a.json'
+2025-02-05 10:29:47,965 INFO OSMnx Created GeoDataFrame with 1 rows from 1 queries
+2025-02-05 10:29:48,032 INFO OSMnx Projected GeoDataFrame to 'EPSG:32631 / WGS 84 / UTM zone 31N'
+2025-02-05 10:29:48,036 INFO OSMnx Projected GeoDataFrame to 'EPSG:4326 / WGS 84'
+2025-02-05 10:29:48,074 INFO OSMnx Projected GeoDataFrame to 'EPSG:32631 / WGS 84 / UTM zone 31N'
+2025-02-05 10:29:48,075 INFO OSMnx Projected GeoDataFrame to 'EPSG:4326 / WGS 84'
+2025-02-05 10:29:48,076 INFO OSMnx Requesting data from API in 1 request(s)
+2025-02-05 10:29:48,109 INFO OSMnx Retrieved response from cache file 'cache/909104e41b152e40b9d587f2b2943ace504afbd3.json'
+2025-02-05 10:29:48,111 INFO OSMnx Retrieved all data from API in 1 request(s)
+2025-02-05 10:29:48,111 INFO OSMnx Creating graph from 1,973 OSM nodes and 302 OSM ways...
+2025-02-05 10:29:48,119 INFO OSMnx Created graph with 1,973 nodes and 2,692 edges
+2025-02-05 10:29:48,123 INFO OSMnx Added length attributes to graph edges
+2025-02-05 10:29:48,123 INFO OSMnx Identifying all nodes that lie outside the polygon...
+2025-02-05 10:29:48,130 INFO OSMnx Created nodes GeoDataFrame from graph
+2025-02-05 10:29:48,130 INFO OSMnx Built r-tree spatial index for 1,973 geometries
+2025-02-05 10:29:48,132 INFO OSMnx Accelerating r-tree with 4 quadrats
+2025-02-05 10:29:48,147 INFO OSMnx Identified 1,613 geometries inside polygon
+2025-02-05 10:29:48,203 INFO OSMnx Removed 360 nodes outside polygon
+2025-02-05 10:29:48,203 INFO OSMnx Truncated graph by polygon
+2025-02-05 10:29:48,203 INFO OSMnx Identifying all nodes that lie outside the polygon...
+2025-02-05 10:29:48,209 INFO OSMnx Created nodes GeoDataFrame from graph
+2025-02-05 10:29:48,209 INFO OSMnx Built r-tree spatial index for 1,613 geometries
+2025-02-05 10:29:48,212 INFO OSMnx Accelerating r-tree with 4 quadrats
+2025-02-05 10:29:48,225 INFO OSMnx Identified 804 geometries inside polygon
+2025-02-05 10:29:48,231 INFO OSMnx Removed 809 nodes outside polygon
+2025-02-05 10:29:48,231 INFO OSMnx Truncated graph by polygon
+2025-02-05 10:29:48,237 INFO OSMnx Counted undirected street segments incident on each node
+2025-02-05 10:29:48,237 INFO OSMnx graph_from_polygon returned graph with 804 nodes and 1,044 edges
+2025-02-05 10:29:48,241 INFO OSMnx Created nodes GeoDataFrame from graph
+2025-02-05 10:29:48,251 INFO OSMnx Created edges GeoDataFrame from graph
+2025-02-05 10:35:50,803 INFO OSMnx Retrieved response from cache file 'cache/bc1d17f0b99fa4c6c2ab0b67e2502731521d061a.json'
+2025-02-05 10:35:50,826 INFO OSMnx Created GeoDataFrame with 1 rows from 1 queries
+2025-02-05 10:35:50,893 INFO OSMnx Projected GeoDataFrame to 'EPSG:32631 / WGS 84 / UTM zone 31N'
+2025-02-05 10:35:50,897 INFO OSMnx Projected GeoDataFrame to 'EPSG:4326 / WGS 84'
+2025-02-05 10:35:50,935 INFO OSMnx Projected GeoDataFrame to 'EPSG:32631 / WGS 84 / UTM zone 31N'
+2025-02-05 10:35:50,936 INFO OSMnx Projected GeoDataFrame to 'EPSG:4326 / WGS 84'
+2025-02-05 10:35:50,937 INFO OSMnx Requesting data from API in 1 request(s)
+2025-02-05 10:35:50,961 INFO OSMnx Retrieved response from cache file 'cache/909104e41b152e40b9d587f2b2943ace504afbd3.json'
+2025-02-05 10:35:50,963 INFO OSMnx Retrieved all data from API in 1 request(s)
+2025-02-05 10:35:50,963 INFO OSMnx Creating graph from 1,973 OSM nodes and 302 OSM ways...
+2025-02-05 10:35:50,970 INFO OSMnx Created graph with 1,973 nodes and 2,692 edges
+2025-02-05 10:35:50,974 INFO OSMnx Added length attributes to graph edges
+2025-02-05 10:35:50,975 INFO OSMnx Identifying all nodes that lie outside the polygon...
+2025-02-05 10:35:50,982 INFO OSMnx Created nodes GeoDataFrame from graph
+2025-02-05 10:35:50,982 INFO OSMnx Built r-tree spatial index for 1,973 geometries
+2025-02-05 10:35:50,984 INFO OSMnx Accelerating r-tree with 4 quadrats
+2025-02-05 10:35:50,999 INFO OSMnx Identified 1,613 geometries inside polygon
+2025-02-05 10:35:51,055 INFO OSMnx Removed 360 nodes outside polygon
+2025-02-05 10:35:51,055 INFO OSMnx Truncated graph by polygon
+2025-02-05 10:35:51,056 INFO OSMnx Identifying all nodes that lie outside the polygon...
+2025-02-05 10:35:51,061 INFO OSMnx Created nodes GeoDataFrame from graph
+2025-02-05 10:35:51,062 INFO OSMnx Built r-tree spatial index for 1,613 geometries
+2025-02-05 10:35:51,063 INFO OSMnx Accelerating r-tree with 4 quadrats
+2025-02-05 10:35:51,075 INFO OSMnx Identified 804 geometries inside polygon
+2025-02-05 10:35:51,081 INFO OSMnx Removed 809 nodes outside polygon
+2025-02-05 10:35:51,081 INFO OSMnx Truncated graph by polygon
+2025-02-05 10:35:51,087 INFO OSMnx Counted undirected street segments incident on each node
+2025-02-05 10:35:51,087 INFO OSMnx graph_from_polygon returned graph with 804 nodes and 1,044 edges
+2025-02-05 10:35:51,091 INFO OSMnx Created nodes GeoDataFrame from graph
+2025-02-05 10:35:51,099 INFO OSMnx Created edges GeoDataFrame from graph

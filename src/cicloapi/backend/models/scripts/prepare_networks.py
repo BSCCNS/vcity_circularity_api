@@ -1,6 +1,6 @@
 
 #config
-from backend.models.scripts.path import PATH
+from cicloapi.backend.models.scripts.path import PATH
 debug = False
 
 # System
@@ -27,8 +27,8 @@ import fiona
 import shapely
 
 # Local
-from backend.models.scripts.functions import fill_holes, extract_relevant_polygon, ox_to_csv, compress_file
-from backend.models.parameters.parameters import  networktypes, osmnxparameters
+from cicloapi.backend.models.scripts.functions import fill_holes, extract_relevant_polygon, ox_to_csv, compress_file
+from cicloapi.backend.models.parameters.parameters import  networktypes, osmnxparameters
 
 # Configuración del logger
 logging.basicConfig(

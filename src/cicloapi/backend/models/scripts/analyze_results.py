@@ -1,6 +1,6 @@
 #config
 from pathlib import Path
-from backend.models.scripts.path import PATH
+from cicloapi.backend.models.scripts.path import PATH
 debug = True
 
 # System
@@ -17,8 +17,8 @@ import igraph as ig
 from shapely.geometry import Polygon
 
 # Local
-from backend.models.scripts.functions import csv_to_ig, calculate_metrics_parallel, delete_overlaps, intersect_igraphs, calculate_metrics_additively, write_result
-from backend.models.parameters.parameters import  prune_measure, networktypes, buffer_walk, numnodepairs
+from cicloapi.backend.models.scripts.functions import csv_to_ig, calculate_metrics_parallel, delete_overlaps, intersect_igraphs, calculate_metrics_additively, write_result
+from cicloapi.backend.models.parameters.parameters import  prune_measure, networktypes, buffer_walk, numnodepairs
 
 # Configure logging
 logger = logging.getLogger(__name__)

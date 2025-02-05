@@ -1,7 +1,7 @@
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parents[1]  # This goes up two levels to the project root
-API_DIR = Path(__file__).resolve().parents[2]
+API_DIR = Path(__file__).resolve().parents[3]
 # Define paths dictionary relative to BASE_DIR
 PATH = {
     "parameters": BASE_DIR / "parameters",

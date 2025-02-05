@@ -1,5 +1,5 @@
 #config
-from backend.models.scripts.path import PATH
+from cicloapi.backend.models.scripts.path import PATH
 debug = False
 
 # System
@@ -19,8 +19,8 @@ from shapely.geometry import Polygon
 
 # Local
 
-from backend.models.scripts.functions import fill_holes, extract_relevant_polygon, csv_to_ox
-from backend.models.parameters.parameters import poiparameters, snapthreshold
+from cicloapi.backend.models.scripts.functions import fill_holes, extract_relevant_polygon, csv_to_ox
+from cicloapi.backend.models.parameters.parameters import poiparameters, snapthreshold
 
 
 
