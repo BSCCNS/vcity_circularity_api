@@ -1,5 +1,5 @@
 # user_methods.py
-from cicloapi.schemas import UserRegistration
+
 
 def get_current_user(token: str) -> str:
 

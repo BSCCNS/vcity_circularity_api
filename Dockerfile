@@ -1,19 +1,20 @@
 # Use an official Python runtime as a parent image
-FROM gboeing/osmnx
+FROM python:3.10-slim
 
 # Set the working directory in the container
 WORKDIR /app
 
 # Copy the requirements file into the container
-COPY dist/ .
-
-COPY src/cicloapi/data/users_db_fake.json /app/src/cicloapi/data/
+COPY requirements.txt .
 
 # Install the Python dependencies
-RUN uv pip install cicloapi-0.2-py3-none-any.whl --system
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code into the container
+COPY backend/ .
 
 # Expose the port that the application will run on
 EXPOSE 8000
 
 # Command to run the application
-CMD post_install && cicloapi
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

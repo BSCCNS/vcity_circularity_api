@@ -1,9 +1,12 @@
-# superuser_endpoints.py
+# user_endpoints.py
 
-from fastapi import APIRouter, HTTPException, status
-from cicloapi.core.config import settings
+from typing import Annotated
+from fastapi import APIRouter, HTTPException, status, Security
+from auth.hashing import *
+from core.config import settings
+from schemas.user_schema import *
 from fastapi.responses import JSONResponse
-
+from data.db_methods import *
 
 
 router = APIRouter()
