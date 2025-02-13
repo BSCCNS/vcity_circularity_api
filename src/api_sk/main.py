@@ -1,8 +1,8 @@
 # main.py
 
 from fastapi import FastAPI
-from core.config import settings
-from core.routers import api_router
+from api_sk.core.config import settings
+from api_sk.core.routers import api_router
 
 
 # Mounts the API and include all routers onto it

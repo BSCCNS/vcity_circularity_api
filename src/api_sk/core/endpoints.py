@@ -1,7 +1,7 @@
 # endpoints.py
 from typing import Annotated
 from fastapi import Depends, APIRouter
-from auth.auth import *
+from api_sk.auth.auth import check_token
 
 router = APIRouter()
 
