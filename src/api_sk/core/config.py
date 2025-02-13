@@ -1,6 +1,6 @@
 # config.py
 
-from data.fake_db import *
+from api_sk.data.fake_db import users_db
 
 # Setting for the API
 

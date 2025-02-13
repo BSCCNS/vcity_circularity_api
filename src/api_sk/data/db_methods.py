@@ -1,6 +1,6 @@
 # db_methods.py
 
-from core.config import settings
+from api_sk.core.config import settings
 import json
 
 
