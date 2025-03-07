@@ -11,12 +11,29 @@
 
 
 ### Local execution
+
+0. Install [uv](https://docs.astral.sh/uv/guides/integration/docker/#installing-uv) if necessary
 1. Clone the repository.
-2. Create a virtual environment with `python -m venv venv`.
-3. Enter into the backend folder `cd backend`
-4. Install the requirements with `pip install -r requirements.txt`.
-5. Run the server with uvicorn `uvicorn main:app`. Add the flag `--reload` for automatic reloading when testing.
-6. The API runs by default in `localhost:8000`.
+2. Create a virtual environment with `uv sync`
+3. Activate the  virtual environment. For MacOS/Lunix
+
+```console
+source .venv/bin/activate
+```
+
+For Windows:
+
+```console
+.venv\Scripts\activate
+```
+
+4. Install the package in editable mode with `uv pip install -e .`
+5. Generate an authentication token with `python post_install.py`
+6. Run the API with `apisk -P 8000`.
+
+## Authentication
+
+Go to <http://0.0.0.0:8000/docs>, click on Authorize, set up username and password. See [Authenticating](#authenticating).
 
 
 ## Overview
@@ -28,8 +45,8 @@
 │   │   ├── hashing.py
 │   ├── core/
 │   │   ├── config.py
-│   │   ├── endpoints.py 
-│   │   ├── routers.py    
+│   │   ├── endpoints.py
+│   │   ├── routers.py
 │   ├── data/
 │   │   ├── db_methods.py
 │   │   ├── fake_db.py
@@ -45,7 +62,7 @@
 ├── README.md
 ```
 
-The API is modular. Basic configuration is in the core folder (settings and a file collecting all the router points). It also contains an example of endpoint in `endpoints.py`. 
+The API is modular. Basic configuration is in the core folder (settings and a file collecting all the router points). It also contains an example of endpoint in `endpoints.py`.
 
 Different functionalities are implemented in their corresponding folder. Each one through a router object. The `main.py` file calls the application and connects the routers. Detail documentation of endpoints, as well as a login page, using the OpenAPI standard, can be found in `/docs`.
 
