@@ -38,29 +38,6 @@ Go to <http://0.0.0.0:8000/docs>, click on Authorize, set up username and passwo
 
 ## Overview
 
-```bash
-├── backend/
-│   ├── auth/
-│   │   ├── auth.py
-│   │   ├── hashing.py
-│   ├── core/
-│   │   ├── config.py
-│   │   ├── endpoints.py
-│   │   ├── routers.py
-│   ├── data/
-│   │   ├── db_methods.py
-│   │   ├── fake_db.py
-│   │   ├── users_db_fake.json
-│   ├── schemas/
-│   │   ├── token_schema.py
-│   │   ├── user_schema.py
-│   ├── user/
-│   │   ├── superuser_endpoints.py
-│   │   ├── user_methods.py
-├── main.py
-├── requirements.txt
-├── README.md
-```
 
 The API is modular. Basic configuration is in the core folder (settings and a file collecting all the router points). It also contains an example of endpoint in `endpoints.py`.
 
