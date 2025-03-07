@@ -1,9 +1,10 @@
 # config.py
 
 from api_sk.data.fake_db import users_db
-
+from dotenv import load_dotenv
+import os
 # Setting for the API
-
+load_dotenv()
 
 class Settings:
     PROJECT_NAME: str = "Skeletor: a barebones API using FastAPI"
@@ -15,15 +16,13 @@ class Settings:
     USERS_DB = users_db
 
     # Scopes for user authorization
-
     SCOPES = {
         "superuser": "User with rights to delete and administes database entries."
     }
 
     # Setting for token encoding (the secret key is Hex 32)
-    SECRET_KEY = "536813181b97e9b63698643c2c8b4edc44b78ca41071a1c92bc9ebdbc09c32de"
+    SECRET_KEY = os.environ["SECRET_KEY"]
     ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 15
-
 
 settings = Settings()
