@@ -1,20 +1,22 @@
 # Use an official Python runtime as a parent image
-FROM python:3.10-slim
+FROM python:3.12-slim-bookworm
 
-# Set the working directory in the container
-WORKDIR /app
+# copy uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Copy the requirements file into the container
-COPY requirements.txt .
-
-# Install the Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+COPY uv.lock .
+COPY pyproject.toml .
 
 # Copy the rest of the application code into the container
-COPY backend/ .
+COPY src/ .
+
+# Install the Python dependencies
+RUN uv sync --frozen
+RUN uv pip install -e .
 
 # Expose the port that the application will run on
 EXPOSE 8000
 
 # Command to run the application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["apisk","-P", "8000"]
