@@ -10,7 +10,7 @@ from fastapi.security import (
 from api_sk.auth.hashing import Hasher
 from api_sk.schemas.user_schema import UserInDB
 from api_sk.schemas.token_schema import Token, TokenData
-from core.config import settings
+from api_sk.core.config import settings
 import jwt
 
 
@@ -123,9 +123,9 @@ def check_superuser(payload: Annotated[dict, Depends(check_token)]):
 # POST request for authentification and handling the token (in JWT format))
 
 
-@router.post("/token")
+@router.post("/token", tags=["User management"])
 async def token_request(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
     """
     Function wrapping the login and authorization process.

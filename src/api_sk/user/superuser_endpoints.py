@@ -1,16 +1,15 @@
 # user_endpoints.py
 
 from fastapi import APIRouter, HTTPException, status
-from core.config import settings
+from api_sk.core.config import settings
 from fastapi.responses import JSONResponse
-
 
 router = APIRouter()
 
 # Endpoints for user management
 
 
-@router.delete("/delete_user")
+@router.delete("/delete_user", tags=["User management"])
 async def delete_user(user: str, token: str):
     """
     Deletes a user from the database.

@@ -18,6 +18,7 @@ src/api_sk/data/__init_.py
 src/api_sk/data/db_methods.py
 src/api_sk/data/fake_db.py
 src/api_sk/schemas/__init__.py
+src/api_sk/schemas/schemas.py
 src/api_sk/schemas/token_schema.py
 src/api_sk/schemas/user_schema.py
 src/api_sk/user/__init__.py
