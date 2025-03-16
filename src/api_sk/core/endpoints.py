@@ -1,11 +1,19 @@
 # endpoints.py
-from typing import Annotated
-from fastapi import Depends, APIRouter
-from api_sk.auth.auth import check_token
+import asyncio
+import datetime
 import logging
 import uuid
-import datetime
-import asyncio
+from typing import Annotated
+
+from fastapi import APIRouter, Depends
+
+from api_sk.auth.auth import check_token
+from api_sk.model.circular import (
+    CCIWeights,
+    District,
+    DistrictIndicators,
+    Districts,
+)
 from api_sk.schemas import schemas
 
 router = APIRouter()
@@ -71,6 +79,30 @@ async def hello_api(token: Annotated[str, Depends(check_token)]):
     tasks[task_id] = task_ob
     task.add_done_callback(lambda t: after_task_done(t, task_id))
     return {"task_id": task_id}
+
+
+@router.post("/circular", summary="Generic endpoint.", tags=["Model endpoints"])
+async def circular_api(
+    cci_weights: CCIWeights, token: Annotated[str, Depends(check_token)]
+) -> Districts:
+    """
+    Return weighted value. User must be authenticated.
+
+    """
+    return Districts(
+        districts=[
+            District(id="1", indicators=DistrictIndicators()),
+            District(id="2", indicators=DistrictIndicators()),
+            District(id="3", indicators=DistrictIndicators()),
+            District(id="4", indicators=DistrictIndicators()),
+            District(id="5", indicators=DistrictIndicators()),
+            District(id="6", indicators=DistrictIndicators()),
+            District(id="7", indicators=DistrictIndicators()),
+            District(id="8", indicators=DistrictIndicators()),
+            District(id="9", indicators=DistrictIndicators()),
+            District(id="10", indicators=DistrictIndicators()),
+        ]
+    )
 
 
 ####### Task Management endpoints ###########
