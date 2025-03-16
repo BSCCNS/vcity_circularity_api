@@ -1,13 +1,16 @@
-# Skeletor
-**Generic skeleton for API using FastAPI.**
+# vcity-circular-api
+
+Circular index API for the vCity project.
 
 ## Instructions
 
 ### Docker
 
-1. Build the docker container by running `docker build -t skeletor .`.
-2. Run the docker container by `docker run -p 8000:8000 skeletor`.
-3. The API runs by default in `localhost:8000`.
+To run the API in a docker container, exposed in port `8000`, do the following:
+
+1. Build the docker container by running `docker build -t vcity-cci-api-image .`.
+2. Run the docker container by `docker run -d --name vcity-cci-api -p 8000:8000 vcity-cci-api-image`.
+3. The API runs in `localhost:8000`.
 
 
 ### Local execution
